@@ -1,0 +1,9 @@
+
+COMPILAR:
+C:\Users\DANILOR\Documents\NetBeansProjects\Tarea1PSP\src>javac ejercicio1\Aleatorios.java ejercicio1\OrdenarNumeros.java
+
+EJECUTAR:
+//MODO NORMAL
+java -cp . ejercicio1.Aleatorios
+//TUBERIAS
+C:\Users\DANILOR\Documents\NetBeansProjects\Tarea1PSP\src>java ejercicio1.Aleatorios | java ejercicio1.OrdenarNumeros

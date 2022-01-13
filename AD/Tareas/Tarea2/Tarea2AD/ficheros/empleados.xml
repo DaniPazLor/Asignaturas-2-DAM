@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<empleados>
+  <empleado código="22">
+    <nombre>Daniel</nombre>
+    <direccion>Calle Santa Tecla</direccion>
+    <salario>1256.89</salario>
+    <comision>2.4</comision>
+  </empleado>
+  <empleado código="11">
+    <nombre>Jose</nombre>
+    <direccion>Avenida Castilla</direccion>
+    <salario>1078.45</salario>
+    <comision>4.6</comision>
+  </empleado>
+  <empleado código="13">
+    <nombre>Luis</nombre>
+    <direccion>Calle Kamela</direccion>
+    <salario>2134.78</salario>
+    <comision>8.1</comision>
+  </empleado>
+  <empleado código="89">
+    <nombre>Mario</nombre>
+    <direccion>Rua do Fontei</direccion>
+    <salario>1856.93</salario>
+    <comision>235.6</comision>
+  </empleado>
+  <empleado código="93">
+    <nombre>Paco</nombre>
+    <direccion>Calle Corredera</direccion>
+    <salario>1556.23</salario>
+    <comision>456.14</comision>
+  </empleado>
+  <empleado código="6">
+    <nombre>Rosa</nombre>
+    <direccion>Calle clavel</direccion>
+    <salario>897.56</salario>
+    <comision>234.5</comision>
+  </empleado>
+</empleados>

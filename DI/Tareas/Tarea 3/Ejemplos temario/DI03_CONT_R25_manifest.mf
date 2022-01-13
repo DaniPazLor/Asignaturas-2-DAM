@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Name: demo/Componente.class
+Java-Bean: True
+Name: demo/ComponenteBeanInfo.class
+Java-Bean: False
+Name: demo/ClaseAuxiliar.class
+Java-Bean: False
+Name: demo/Imagen.png
+Java-Bean: False

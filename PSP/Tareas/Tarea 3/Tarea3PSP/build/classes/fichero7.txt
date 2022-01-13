@@ -1,0 +1,6 @@
+Hola Cliente, este es el contenido del fichero 7 del servidor, 
+contenido dentro de la carpeta ficheroServidor.
+
+Despues de mostrar el contenido de este fichero finalizara la conexion con el servidor.
+Gracias y un saludo.
+

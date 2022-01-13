@@ -1,0 +1,6 @@
+Proceso0: Valor leído del fichero: 8
+Proceso0: Valor escrito en el fichero: 9
+Proceso0: Valor leído del fichero: 10
+P0 Error al leer del fichero
+P0 Error al leer del fichero
+P0 Error al leer del fichero

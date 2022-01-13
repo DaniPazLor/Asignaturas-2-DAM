@@ -1,0 +1,2 @@
+com.example.SanAngeles:string/app_name = 0x7f020000
+com.example.SanAngeles:mipmap/ic_launcher = 0x7f010000

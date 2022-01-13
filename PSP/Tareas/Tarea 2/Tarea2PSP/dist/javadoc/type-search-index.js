@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"ejercicio1","l":"BufferCaracteres"},{"p":"ejercicio2","l":"Filosofo"},{"p":"ejercicio1","l":"HiloConsumidor"},{"p":"ejercicio1","l":"HiloProductor"},{"p":"ejercicio2","l":"Main"},{"p":"ejercicio1","l":"PrincipalProductorConsumidor"}];updateSearchResults();
