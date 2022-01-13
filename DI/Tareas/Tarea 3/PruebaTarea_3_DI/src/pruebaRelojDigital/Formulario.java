@@ -31,7 +31,6 @@ public class Formulario extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        relojDigital1.setAlarma(true);
         relojDigital1.setMinuto_Alarma(3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

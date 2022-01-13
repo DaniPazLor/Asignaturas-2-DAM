@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 20-dic-2021 5:27:37 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Empresa.Emp" table="EMP" schema="DANI" optimistic-lock="version">
+        <id name="empno" type="short">
+            <column name="EMPNO" precision="4" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="dept" class="Empresa.Dept" fetch="select">
+            <column name="DEPTNO" precision="2" scale="0" />
+        </many-to-one>
+        <many-to-one name="emp" class="Empresa.Emp" fetch="select">
+            <column name="MGR" precision="4" scale="0" />
+        </many-to-one>
+        <property name="ename" type="string">
+            <column name="ENAME" length="10" />
+        </property>
+        <property name="job" type="string">
+            <column name="JOB" length="9" />
+        </property>
+        <property name="hiredate" type="date">
+            <column name="HIREDATE" length="7" />
+        </property>
+        <property name="sal" type="big_decimal">
+            <column name="SAL" precision="7" />
+        </property>
+        <property name="comm" type="big_decimal">
+            <column name="COMM" precision="7" />
+        </property>
+        <set name="emps" table="EMP" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MGR" precision="4" scale="0" />
+            </key>
+            <one-to-many class="Empresa.Emp" />
+        </set>
+    </class>
+</hibernate-mapping>

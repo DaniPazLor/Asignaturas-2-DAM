@@ -43,7 +43,6 @@
   <SubComponents>
     <Component class="componenteReloj.RelojDigital" name="relojDigital1">
       <Properties>
-        <Property name="alarma" type="boolean" value="true"/>
         <Property name="minuto_Alarma" type="int" value="3"/>
       </Properties>
     </Component>
