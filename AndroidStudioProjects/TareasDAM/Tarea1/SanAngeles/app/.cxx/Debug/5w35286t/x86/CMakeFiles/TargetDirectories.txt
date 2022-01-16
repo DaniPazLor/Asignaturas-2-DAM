@@ -1,3 +1,0 @@
-C:/Users/DANILOR/AndroidStudioProjects/TareasDAM/Tarea1/SanAngeles/app/.cxx/Debug/5w35286t/x86/CMakeFiles/sanangeles.dir
-C:/Users/DANILOR/AndroidStudioProjects/TareasDAM/Tarea1/SanAngeles/app/.cxx/Debug/5w35286t/x86/CMakeFiles/edit_cache.dir
-C:/Users/DANILOR/AndroidStudioProjects/TareasDAM/Tarea1/SanAngeles/app/.cxx/Debug/5w35286t/x86/CMakeFiles/rebuild_cache.dir
