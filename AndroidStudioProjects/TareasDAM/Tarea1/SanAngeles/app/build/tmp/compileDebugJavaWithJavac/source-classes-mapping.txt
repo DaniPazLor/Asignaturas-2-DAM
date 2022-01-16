@@ -1,0 +1,6 @@
+com/example/SanAngeles/DemoActivity.java
+ com.example.SanAngeles.DemoActivity
+ com.example.SanAngeles.DemoGLSurfaceView
+ com.example.SanAngeles.DemoRenderer
+com/example/SanAngeles/BuildConfig.java
+ com.example.SanAngeles.BuildConfig

@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\DANILOR\\AndroidStudioProjects\\TareasDAM\\Tarea1\\SanAngeles\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\DANILOR\\AndroidStudioProjects\\TareasDAM\\Tarea1\\SanAngeles\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\DANILOR\\AndroidStudioProjects\\TareasDAM\\Tarea1\\SanAngeles\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\DANILOR\\AndroidStudioProjects\\TareasDAM\\Tarea1\\SanAngeles\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\DANILOR\\AndroidStudioProjects\\TareasDAM\\Tarea1\\SanAngeles\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\DANILOR\\AndroidStudioProjects\\TareasDAM\\Tarea1\\SanAngeles\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\DANILOR\\AndroidStudioProjects\\TareasDAM\\Tarea1\\SanAngeles\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\DANILOR\\AndroidStudioProjects\\TareasDAM\\Tarea1\\SanAngeles\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    }
+]
