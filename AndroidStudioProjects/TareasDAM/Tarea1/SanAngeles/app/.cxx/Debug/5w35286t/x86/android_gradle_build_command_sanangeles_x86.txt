@@ -1,0 +1,7 @@
+Executable : C:\Users\DANILOR\AppData\Local\Android\Sdk\cmake\3.18.1\bin\ninja.exe
+arguments : 
+-C
+C:\Users\DANILOR\AndroidStudioProjects\TareasDAM\Tarea1\SanAngeles\app\.cxx\Debug\5w35286t\x86
+sanangeles
+jvmArgs : 
+
