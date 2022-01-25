@@ -20,7 +20,8 @@ public class Servidor extends Thread {
     private static int PUERTO = 2000;
     public Socket socketCliente;
     String nombreFichero = "refranes.txt";
-    String refranGuiones;
+    String refranGuiones="";
+    String refranAleatorio="";
     int numLetrasRefran;
     public String refranes[] = {"A quien madruga Dios le ayuda",
         "Cría cuervos y te sacarán los ojos",
@@ -56,27 +57,37 @@ public class Servidor extends Thread {
     public void run() {
         FicheroRefranes ficheroRefranes = new FicheroRefranes(this.nombreFichero);
 //        String refranAleatorio = generarRefranAleatorio();
-        String refranAleatorio = ficheroRefranes.refran;
+        this.refranAleatorio = ficheroRefranes.refran;
         int cont = 0;
-        boolean adivinado=false;
+        int adivinado=0;
+        int numIntentos=0;
+        int num=0;
+        
         System.out.println(refranAleatorio);
         this.numLetrasRefran = sustituirLetrasXGuiones(refranAleatorio);
         System.out.println("letras que contiene el refrán "+ numLetrasRefran);
         try {
             DataInputStream flujo_entrada = new DataInputStream(socketCliente.getInputStream());
             DataOutputStream flujo_salida = new DataOutputStream(socketCliente.getOutputStream());
-
+   
             flujo_salida.writeUTF(refranGuiones);
             do {
-
+                num++;
+                numIntentos = (numLetrasRefran+5) - num;
+                 flujo_salida.writeInt(numIntentos);
                 char letra = flujo_entrada.readChar();
                 cont = comprobarLetra(letra, refranAleatorio, refranGuiones,cont);
 
                 flujo_salida.writeUTF(refranGuiones);
                 if (cont==numLetrasRefran) {
-                    adivinado=true;
+                    adivinado=1;
                 }
-                flujo_salida.writeBoolean(adivinado);
+                if (num==(numLetrasRefran*2)) {
+                    adivinado=2;
+                }
+                
+                flujo_salida.writeInt(adivinado);
+               
             } while (cont < numLetrasRefran);
 
 
@@ -112,21 +123,26 @@ public class Servidor extends Thread {
     }
 
     private int comprobarLetra(char letra, String refranAleatorio, String refranGuiones, int cont) {
+        
         StringBuilder cadenaAux = new StringBuilder(refranGuiones);
+        StringBuilder cadenaAux2 = new StringBuilder(refranAleatorio);
 
         System.out.println(letra);
         for (int i = 0; i < refranAleatorio.length(); i++) {
             if (refranAleatorio.charAt(i) == letra) {
                 System.out.println("encontrada letra " + letra + " en posicion " + i);
-
+                cadenaAux2.setCharAt(i, '-');
                 cadenaAux.setCharAt(i, letra);
                 cont++;
                 System.out.println("Cadena auxiliar: "+cadenaAux);
             }
         }
         System.out.println("letras acertadas "+cont);
+        this.refranAleatorio = cadenaAux2.toString();
+
         this.refranGuiones = cadenaAux.toString();
         System.out.println(this.refranGuiones);
+        System.out.println("Refran descartes "+ refranAleatorio);
         return cont;
     }
 

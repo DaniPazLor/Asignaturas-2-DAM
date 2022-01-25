@@ -23,7 +23,8 @@ public class Cliente {
     public Cliente(){
         Scanner teclado = new Scanner(System.in);
         String refranIncognita;
-        boolean adivinado;
+        int adivinado;
+        int numIntentos;
         
          try {
             Socket socketCliente = new Socket(HOST, PUERTO);
@@ -36,16 +37,24 @@ public class Cliente {
              System.out.println(refranIncognita);
              
              do{
+                          numIntentos = flujo_entrada.readInt();
+                 System.out.println("\t\tLe restan "+ numIntentos + " intentos");
              System.out.println("Dime una letra: ");
              char caracter = teclado.next().charAt(0);
-             flujo_salida.writeChar(caracter);
+             flujo_salida.writeChar(Character.toUpperCase(caracter));
              
              System.out.println("El refrán quedaría así");
              refranIncognita = flujo_entrada.readUTF();
              System.out.println(refranIncognita);
-             adivinado = flujo_entrada.readBoolean();
-             }while(!adivinado);
-             System.out.println("ENHORABUENA!!! HAS ADIVINADO EL REFRÁN");
+             adivinado = flujo_entrada.readInt();
+
+             }while(adivinado==0);
+             if (adivinado==1) {
+                System.out.println("ENHORABUENA!!! HAS ADIVINADO EL REFRÁN"); 
+             }else if(adivinado==2){
+                 System.out.println("LO SIENTO HAS EXCEDIDO EL NÚMERO DE INTENTOS");
+             }
+             
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
