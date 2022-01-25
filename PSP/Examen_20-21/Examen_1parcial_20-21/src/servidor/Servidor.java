@@ -7,6 +7,7 @@ package servidor;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,16 +19,19 @@ public class Servidor extends Thread {
 
     private static int PUERTO = 2000;
     public Socket socketCliente;
+    String nombreFichero = "refranes.txt";
+    String refranGuiones;
+    int numLetrasRefran;
     public String refranes[] = {"A quien madruga Dios le ayuda",
-         "Cría cuervos y te sacarán los ojos",
-         "Quien a buen árbol se arrima buena sombra le cobija",
-         "A caballo regalado no le mires el diente",
-         "El casado casa quiere"};
-    
-    public Servidor(){
-        
+        "Cría cuervos y te sacarán los ojos",
+        "Quien a buen árbol se arrima buena sombra le cobija",
+        "A caballo regalado no le mires el diente",
+        "El casado casa quiere"};
+
+    public Servidor() {
+
     }
-    
+
     public Servidor(Socket socketCliente) {
         this.socketCliente = socketCliente;
     }
@@ -36,13 +40,12 @@ public class Servidor extends Thread {
 //        Servidor servidor = new Servidor();
 //        servidor.generarRefranAleatorio();
         try {
- 
-                ServerSocket serverSocket = new ServerSocket(PUERTO);
 
-                Socket socketCliente = serverSocket.accept();
+            ServerSocket serverSocket = new ServerSocket(PUERTO);
 
-                new Servidor(socketCliente).start();
-            
+            Socket socketCliente = serverSocket.accept();
+
+            new Servidor(socketCliente).start();
 
         } catch (IOException ex) {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
@@ -51,67 +54,80 @@ public class Servidor extends Thread {
 
     @Override
     public void run() {
-
-        String refranAleatorio = generarRefranAleatorio();
-        
-        String refranGuiones = sustituirLetrasXGuiones(refranAleatorio);
-
+        FicheroRefranes ficheroRefranes = new FicheroRefranes(this.nombreFichero);
+//        String refranAleatorio = generarRefranAleatorio();
+        String refranAleatorio = ficheroRefranes.refran;
+        int cont = 0;
+        boolean adivinado=false;
+        System.out.println(refranAleatorio);
+        this.numLetrasRefran = sustituirLetrasXGuiones(refranAleatorio);
+        System.out.println("letras que contiene el refrán "+ numLetrasRefran);
         try {
             DataInputStream flujo_entrada = new DataInputStream(socketCliente.getInputStream());
             DataOutputStream flujo_salida = new DataOutputStream(socketCliente.getOutputStream());
 
             flujo_salida.writeUTF(refranGuiones);
-            
-            char letra = flujo_entrada.readChar();
-            refranGuiones = comprobarLetra(letra, refranAleatorio, refranGuiones);
-            
-            flujo_salida.writeUTF(refranGuiones);
+            do {
+
+                char letra = flujo_entrada.readChar();
+                cont = comprobarLetra(letra, refranAleatorio, refranGuiones,cont);
+
+                flujo_salida.writeUTF(refranGuiones);
+                if (cont==numLetrasRefran) {
+                    adivinado=true;
+                }
+                flujo_salida.writeBoolean(adivinado);
+            } while (cont < numLetrasRefran);
+
+
         } catch (IOException ex) {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    public String generarRefranAleatorio() {
-        
-        int numAleatorio = (int) Math.floor(Math.random()*refranes.length);
+//    public String generarRefranAleatorio() {
+//
+//        int numAleatorio = (int) Math.floor(Math.random() * refranes.length);
+//
+//        String refran = refranes[numAleatorio];
+//        System.out.println(refran);
+//
+//        return refran;
+//    }
 
-        String refran = refranes[numAleatorio];      
-        System.out.println(refran);
-        
-        return refran;
-    }
+    public int sustituirLetrasXGuiones(String refran) {
+        int num = 0;
 
-    public String sustituirLetrasXGuiones(String refran) {
-        String refranGuiones="";
-        
         for (int i = 0; i < refran.length(); i++) {
-            if (refran.charAt(i)==' ') {
-                refranGuiones+=" ";
-            }else{
-                refranGuiones+="-";     
+            if (refran.charAt(i) == ' ') {
+                this.refranGuiones += " ";
+            } else {
+                this.refranGuiones += "-";
+                num++;
             }
         }
         System.out.println(refranGuiones);
-        
-        return refranGuiones;
+        return num;
     }
 
-    private String comprobarLetra(char letra, String refranAleatorio, String refranGuiones) {
+    private int comprobarLetra(char letra, String refranAleatorio, String refranGuiones, int cont) {
         StringBuilder cadenaAux = new StringBuilder(refranGuiones);
-        
+
         System.out.println(letra);
-        for (int i = 0; i < refranAleatorio.length(); i++) { 
-            if (refranAleatorio.charAt(i)==letra) {
-                System.out.println("encontrada letra "+ letra + " en posicion "+ i);
-                
+        for (int i = 0; i < refranAleatorio.length(); i++) {
+            if (refranAleatorio.charAt(i) == letra) {
+                System.out.println("encontrada letra " + letra + " en posicion " + i);
+
                 cadenaAux.setCharAt(i, letra);
-                
+                cont++;
+                System.out.println("Cadena auxiliar: "+cadenaAux);
             }
         }
-        refranGuiones = cadenaAux.toString();
-        System.out.println(refranGuiones);
-        return refranGuiones;
+        System.out.println("letras acertadas "+cont);
+        this.refranGuiones = cadenaAux.toString();
+        System.out.println(this.refranGuiones);
+        return cont;
     }
 
 }
