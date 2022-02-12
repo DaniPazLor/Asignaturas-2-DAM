@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1e09419c-0d2a-4105-bd2b-f7d52226e2f5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT * FROM Clientes, Pedidos, detalle_pedidos WHERE Clientes.ID_Cliente=pedidos.ID_Cliente AND detalle_pedidos.ID_Pedido=pedidos.ID_Pedido]]>
 	</queryString>
@@ -33,29 +36,88 @@
 	<field name="Unidades" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<group name="ID_Cliente">
+	<variable name="Precio_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Pedido" calculation="Sum">
+		<variableExpression><![CDATA[$F{Precio}]]></variableExpression>
+	</variable>
+	<group name="Pedido">
+		<groupExpression><![CDATA[$F{ID_Pedido}]]></groupExpression>
+		<groupFooter>
+			<band height="50">
+				<textField>
+					<reportElement x="100" y="30" width="100" height="20" uuid="deb55646-4c8f-4e57-b2cb-04e018abcd2d"/>
+					<textFieldExpression><![CDATA[$F{ID_Pedido}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="200" y="30" width="100" height="20" uuid="d5ab678a-e687-407f-97b7-5d57dd1f6cd1"/>
+					<textFieldExpression><![CDATA[""+$F{Fecha_Pedido}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="47" y="30" width="53" height="20" uuid="e781685a-0ba5-4caa-bbb2-3ca5146a7a8f"/>
+					<text><![CDATA[Pedido]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="300" y="30" width="100" height="20" uuid="ecedaa04-d573-491f-b3dc-c5546d5624ca"/>
+					<textFieldExpression><![CDATA[$V{Precio_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="Cliente">
 		<groupExpression><![CDATA[$F{ID_Cliente}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<staticText>
+					<reportElement x="0" y="30" width="100" height="20" uuid="a0a58ffc-c94a-4a7e-a3f1-e58cf03ad11c"/>
+					<text><![CDATA[Nombre]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="100" y="30" width="100" height="20" uuid="da281386-9a05-4c72-a1de-e69ba1e0f7c6"/>
+					<text><![CDATA[Direccion]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="200" y="30" width="100" height="20" uuid="18e77e0a-dc3a-4722-ab09-971d19a0ab93"/>
+					<text><![CDATA[Ciudad]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="26">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20" uuid="f200a877-c70c-4446-859e-a85adf7dd742"/>
+					<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="0" width="100" height="20" uuid="27a7a1a7-b728-4394-aa06-00c05fd091cd"/>
+					<textFieldExpression><![CDATA[$F{Direccion}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="200" y="0" width="100" height="20" uuid="02629f87-44ad-43c9-b61a-b23463c4ea32"/>
+					<textFieldExpression><![CDATA[$F{Ciudad}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
 	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch"/>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="21" width="287" height="58" uuid="bbb65358-ef34-4e61-a13e-63530e6d4478"/>
+				<textElement textAlignment="Center">
+					<font size="30"/>
+				</textElement>
+				<text><![CDATA[FACTURAS]]></text>
+			</staticText>
+		</band>
 	</title>
-	<pageHeader>
-		<band height="35" splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band height="61" splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band height="125" splitType="Stretch"/>
-	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="455" y="34" width="100" height="20" uuid="1da2a3e4-e01e-48f9-b985-366ba5384bdf"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 	<summary>
 		<band height="42" splitType="Stretch"/>
