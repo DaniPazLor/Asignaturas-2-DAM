@@ -28,7 +28,7 @@ public class InformeCliente {
 
     public InformeCliente() {
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             conexion = DriverManager.getConnection(baseDatos, usuario, clave);
         } catch (ClassNotFoundException cnfe) {
             System.err.println("Fallo al cargar JDBC");
