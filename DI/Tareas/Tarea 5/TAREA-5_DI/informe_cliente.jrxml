@@ -3,7 +3,9 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="CLIENTE" class="java.lang.String"/>
+	<parameter name="CLIENTE" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT * FROM Clientes, Pedidos, detalle_pedidos WHERE clientes.ID_Cliente=pedidos.ID_Cliente AND detalle_pedidos.ID_Pedido=pedidos.ID_Pedido AND clientes.ID_Cliente=$P{CLIENTE}]]>
 	</queryString>
@@ -22,7 +24,7 @@
 	<field name="ID_Pedido" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Fecha_Pedido" class="java.time.LocalDateTime">
+	<field name="Fecha_Pedido" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="ID_Venta" class="java.lang.Integer">
@@ -49,8 +51,8 @@
 	<variable name="Precio_3" class="java.math.BigDecimal" resetType="Group" resetGroup="Id_Cliente" calculation="Sum">
 		<variableExpression><![CDATA[$F{Precio}]]></variableExpression>
 	</variable>
-	<variable name="importe" class="java.lang.Integer">
-		<variableExpression><![CDATA[($F{Unidades} * $F{Precio})]]></variableExpression>
+	<variable name="importe" class="java.lang.Double">
+		<variableExpression><![CDATA[new java.lang.Double($F{Unidades}.doubleValue()*$F{Precio}.doubleValue())]]></variableExpression>
 	</variable>
 	<variable name="Precio_4" class="java.math.BigDecimal" resetType="Group" resetGroup="Id_Cliente" calculation="Sum">
 		<variableExpression><![CDATA[$F{Precio}]]></variableExpression>

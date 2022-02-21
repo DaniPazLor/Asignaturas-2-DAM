@@ -52,7 +52,7 @@ public class InformeCliente {
         try {
             //Cargamos los parametros del informe en una tabla Hash
             Map parametros = new HashMap();
-            parametros.put("CLIENTE", cliente);
+            parametros.put("cliente", cliente);
             //Generamos el informe en memoria
             JasperPrint print = JasperFillManager.fillReport(archivojasper, parametros, conexion);
             // Exporta el informe a PDF 

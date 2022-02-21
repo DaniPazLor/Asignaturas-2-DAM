@@ -88,8 +88,9 @@ class ServidorHTTP {
         //sirve la página
         html = Paginas.html_index;
         printWriter.println(Mensajes.lineaInicial_OK);
-        printWriter.println(Paginas.primeraCabecera);
+        printWriter.println(Paginas.primeraCabecera);   
         printWriter.println("Content-Length: " + html.length() + 1);
+        printWriter.println("Date: "+Paginas.cabeceraFecha());
         printWriter.println("\n");
         printWriter.println(html);
       } //si corresponde a la página del Quijote
@@ -99,6 +100,7 @@ class ServidorHTTP {
         printWriter.println(Mensajes.lineaInicial_OK);
         printWriter.println(Paginas.primeraCabecera);
         printWriter.println("Content-Length: " + html.length() + 1);
+        printWriter.println("Date: "+Paginas.cabeceraFecha());
         printWriter.println("\n");
         printWriter.println(html);
       } //en cualquier otro caso
@@ -108,6 +110,7 @@ class ServidorHTTP {
         printWriter.println(Mensajes.lineaInicial_NotFound);
         printWriter.println(Paginas.primeraCabecera);
         printWriter.println("Content-Length: " + html.length() + 1);
+        printWriter.println("Date: "+Paginas.cabeceraFecha());
         printWriter.println("\n");
         printWriter.println(html);
       }
@@ -128,8 +131,7 @@ class ServidorHTTP {
             + "solicitar la página de bienvenida\n\nhttp://localhost:8066/"
             + "quijote\n para solicitar una página del Quijote,\n\nhttp://"
             + "localhost:8066/q\n para simular un error");
-    
-    System.out.println("Fecha de hoy " + Paginas.cabeceraFecha());
+      System.out.println("Date: "+Paginas.cabeceraFecha());
   }
   
     

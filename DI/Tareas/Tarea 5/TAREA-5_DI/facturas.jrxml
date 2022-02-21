@@ -21,7 +21,7 @@
 	<field name="ID_Pedido" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Fecha_Pedido" class="java.time.LocalDateTime">
+	<field name="Fecha_Pedido" class="java.util.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="ID_Venta" class="java.lang.Integer">
@@ -48,8 +48,8 @@
 	<variable name="Precio_3" class="java.math.BigDecimal" resetType="Group" resetGroup="Id_Cliente" calculation="Sum">
 		<variableExpression><![CDATA[$F{Precio}]]></variableExpression>
 	</variable>
-	<variable name="importe" class="java.lang.Integer">
-		<variableExpression><![CDATA[($F{Unidades} * $F{Precio})]]></variableExpression>
+	<variable name="importe" class="java.lang.Double">
+		<variableExpression><![CDATA[new java.lang.Double($F{Unidades}.doubleValue()*$F{Precio}.doubleValue())]]></variableExpression>
 	</variable>
 	<variable name="Precio_4" class="java.math.BigDecimal" resetType="Group" resetGroup="Id_Cliente" calculation="Sum">
 		<variableExpression><![CDATA[$F{Precio}]]></variableExpression>
@@ -57,7 +57,7 @@
 	<variable name="Precio_5" class="java.math.BigDecimal" resetType="Group" resetGroup="Id_Cliente" calculation="Sum">
 		<variableExpression><![CDATA[$F{Precio}]]></variableExpression>
 	</variable>
-	<variable name="importe_total" class="java.math.BigDecimal" resetType="Group" resetGroup="Id_Cliente" calculation="Sum">
+	<variable name="importe_total" class="java.lang.Integer" resetType="Group" resetGroup="Id_Cliente" calculation="Sum">
 		<variableExpression><![CDATA[$V{importe}]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
@@ -155,12 +155,12 @@
 					<text><![CDATA[Importe total cliente]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="454" y="0" width="100" height="20" uuid="b5bce508-35c2-4691-9a22-1a1acb71ccf7"/>
-					<textFieldExpression><![CDATA[$V{importe_total}]]></textFieldExpression>
-				</textField>
-				<textField>
 					<reportElement x="354" y="0" width="100" height="20" uuid="7170f2f3-6f46-4ec9-8623-8af4b9dcda07"/>
 					<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="454" y="0" width="100" height="20" uuid="ddf0ed62-31db-4a69-befd-710425afaf5f"/>
+					<textFieldExpression><![CDATA[$V{importe_total}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -182,10 +182,6 @@
 	<detail>
 		<band height="44">
 			<textField>
-				<reportElement x="455" y="0" width="100" height="20" uuid="170a78a7-156a-4508-bc96-982f0c5878b1"/>
-				<textFieldExpression><![CDATA[$V{importe}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="55" y="0" width="100" height="20" uuid="3fc6b7d6-f6ee-4399-890f-f9e56101c6d7"/>
 				<textFieldExpression><![CDATA[$F{ID_Pedido}]]></textFieldExpression>
 			</textField>
@@ -198,8 +194,12 @@
 				<textFieldExpression><![CDATA[$F{Precio}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="155" y="0" width="100" height="20" uuid="6b3df4fa-b6ad-479f-b008-326fb62a4df7"/>
-				<textFieldExpression><![CDATA[""+$F{Fecha_Pedido}]]></textFieldExpression>
+				<reportElement x="154" y="0" width="100" height="20" uuid="b6a98124-e125-4c4d-8810-b317d9525e9a"/>
+				<textFieldExpression><![CDATA[$F{Fecha_Pedido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20" uuid="59c02114-e6fe-478e-83c2-eb0b3ddce831"/>
+				<textFieldExpression><![CDATA[$V{importe}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
