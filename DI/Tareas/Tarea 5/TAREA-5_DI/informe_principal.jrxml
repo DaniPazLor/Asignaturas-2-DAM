@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="af75a43e-2104-4a70-a994-056b45c9a026">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\Curso Dam\\Asignaturas 2ºDAM\\DI\\Tareas\\Tarea 5\\TAREA-5_DI\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT * FROM clientes,pedidos WHERE clientes.ID_Cliente=pedidos.ID_Cliente]]>
+	</queryString>
+	<field name="ID_Cliente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Direccion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Ciudad" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ID_Pedido" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Fecha_Pedido" class="java.time.LocalDateTime">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="variable1" class="java.lang.Integer" resetType="Group" resetGroup="ID_Cliente" calculation="Sum"/>
+	<group name="ID_Cliente">
+		<groupExpression><![CDATA[$F{ID_Cliente}]]></groupExpression>
+		<groupHeader>
+			<band height="65">
+				<textField>
+					<reportElement x="0" y="26" width="100" height="20" uuid="8b741cb3-586b-4f1e-bb2f-8a81a72401a6"/>
+					<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="121" y="26" width="100" height="20" uuid="620286cd-a2fb-402a-938c-aed4c2a4b1cf"/>
+					<textFieldExpression><![CDATA[$F{Direccion}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="254" y="26" width="100" height="20" uuid="b8fa1a1a-49dc-438c-b0c8-b41618116f84"/>
+					<textFieldExpression><![CDATA[$F{Ciudad}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="6" width="100" height="20" uuid="7d2d81fb-bf83-46af-9f6c-92a66ed05e9c"/>
+					<text><![CDATA[Nombre]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="121" y="6" width="100" height="20" uuid="ca9abc72-d432-4809-9768-adcd5d30781e"/>
+					<text><![CDATA[Direccion]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="254" y="6" width="100" height="20" uuid="e07ecaf7-0b19-4b62-8b01-68cb121bdfd0"/>
+					<text><![CDATA[Ciudad]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="39" y="0" width="468" height="54" uuid="9997d3b5-ecad-4ef0-8d78-80c34b422ea1"/>
+				<textElement>
+					<font size="36" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUBINFORME FACTURAS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="112" splitType="Stretch">
+			<subreport>
+				<reportElement x="72" y="0" width="200" height="100" uuid="f64499d7-8495-4d17-b37e-74fca888adf3"/>
+				<subreportParameter name="cliente">
+					<subreportParameterExpression><![CDATA[$F{ID_Cliente}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "informe_secundario_pedidos.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="317" y="0" width="200" height="100" uuid="bad17ad2-3910-419a-9686-a071ce6184c6"/>
+				<subreportParameter name="pedido">
+					<subreportParameterExpression><![CDATA[$F{ID_Pedido}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "informe_secundario_detalles.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

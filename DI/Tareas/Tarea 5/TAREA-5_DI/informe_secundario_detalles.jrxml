@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="300" pageHeight="842" columnWidth="300" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2fdb2f44-92ec-4641-91a0-6eaa0875c956">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="pedido" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT * FROM detalle_pedidos WHERE detalle_pedidos.ID_Pedido=$P{pedido}]]>
+	</queryString>
+	<field name="ID_Venta" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ID_Articulo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Precio" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Unidades" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ID_Pedido" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="importe" class="java.lang.Double">
+		<variableExpression><![CDATA[new java.lang.Double($F{Unidades}.doubleValue()*$F{Precio}.doubleValue())]]></variableExpression>
+	</variable>
+	<variable name="ImporteTotal" class="java.lang.Integer" resetType="Group" resetGroup="ID_Pedido" calculation="Sum">
+		<variableExpression><![CDATA[$V{importe}]]></variableExpression>
+	</variable>
+	<group name="ID_Pedido">
+		<groupExpression><![CDATA[$F{ID_Pedido}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="144" height="20" uuid="a3e16ddb-fab4-4ae1-8fec-ccfd5bb0a162"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE PEDIDO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="59" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="77b7821a-8673-489f-a445-aae9f0985312"/>
+				<text><![CDATA[Unidades]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="20" width="100" height="20" uuid="5303010e-98ef-4a0f-be48-d773d8a4bc37"/>
+				<textFieldExpression><![CDATA[$F{Unidades}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20" uuid="150b193d-afce-4b40-94b4-0e0ffa8d514f"/>
+				<text><![CDATA[Precio]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="20" width="100" height="20" uuid="721e370c-2a27-4709-84b2-dd5df927886e"/>
+				<textFieldExpression><![CDATA[$F{Precio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="20" width="100" height="20" uuid="918fea5e-24d0-4ff6-a0ad-c6318e0e5a20"/>
+				<textFieldExpression><![CDATA[$V{importe}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="20" uuid="c4aa1d79-d652-4c80-87b3-52f9706a0284"/>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
