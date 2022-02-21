@@ -90,6 +90,7 @@ class ServidorHTTP {
         printWriter.println(Mensajes.lineaInicial_OK);
         printWriter.println(Paginas.primeraCabecera);   
         printWriter.println("Content-Length: " + html.length() + 1);
+        //Añadida cabecera Date al proyecto
         printWriter.println("Date: "+Paginas.cabeceraFecha());
         printWriter.println("\n");
         printWriter.println(html);
@@ -100,6 +101,7 @@ class ServidorHTTP {
         printWriter.println(Mensajes.lineaInicial_OK);
         printWriter.println(Paginas.primeraCabecera);
         printWriter.println("Content-Length: " + html.length() + 1);
+        //Añadida cabecera Date al proyecto
         printWriter.println("Date: "+Paginas.cabeceraFecha());
         printWriter.println("\n");
         printWriter.println(html);
@@ -110,6 +112,7 @@ class ServidorHTTP {
         printWriter.println(Mensajes.lineaInicial_NotFound);
         printWriter.println(Paginas.primeraCabecera);
         printWriter.println("Content-Length: " + html.length() + 1);
+        //Añadida cabecera Date al proyecto
         printWriter.println("Date: "+Paginas.cabeceraFecha());
         printWriter.println("\n");
         printWriter.println(html);

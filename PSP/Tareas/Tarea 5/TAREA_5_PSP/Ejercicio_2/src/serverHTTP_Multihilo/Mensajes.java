@@ -1,5 +1,5 @@
 
-package serverHTTP;
+package serverHTTP_Multihilo;
 
 /**
  *
@@ -11,6 +11,6 @@ public class Mensajes {
   public static final String lineaInicial_NotFound =
           "HTTP/3.0 404 Not Found";
 //  public static final String lineaInicial_BadRequest =
-//          "HTTP/1.1 400 Bad Request";
+//          "HTTP/3.0 400 Bad Request";
  
 }

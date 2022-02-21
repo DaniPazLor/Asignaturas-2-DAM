@@ -54,6 +54,11 @@ public class Paginas {
             + "</body>"
             + "</html>";
 
+    /**
+     * Método que configura la fecha recogida del sistema para que sea
+     * compatible con el formato Date de cabeceras http
+     * @return 
+     */
     public static String cabeceraFecha() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat(

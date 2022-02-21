@@ -1,4 +1,4 @@
-package serverHTTP;
+package serverHTTP_Multihilo;
 
 import java.io.BufferedReader;
 import java.net.Socket;
@@ -12,7 +12,8 @@ import java.util.logging.Logger;
 /**
  * *****************************************************************************
  * Servidor HTTP que atiende peticiones de tipo 'GET' recibidas por el puerto
- * 8066
+ * 8066. Lo hace de manera concurrente y multihilo aceptando varias peticiones 
+ * de clientes a la vez
  *
  * NOTA: para probar este código, comprueba primero de que no tienes ningún otro
  * servicio por el puerto 8066 (por ejemplo, con el comando 'netstat' si estás
@@ -30,8 +31,9 @@ class ServidorHTTP_Multihilo extends Thread {
 
     /**
      * **************************************************************************
-     * procedimiento principal que asigna a cada petición entrante un socket
-     * cliente, por donde se enviará la respuesta una vez procesada
+     * procedimiento principal que crea un hilo a cada petición entrante y 
+     * asignaun socket cliente, por donde se enviará la respuesta una 
+     * vez procesada
      *
      * @param args the command line arguments
      */
@@ -50,11 +52,8 @@ class ServidorHTTP_Multihilo extends Thread {
             //atiendo un cliente
             System.out.println("Atendiendo al cliente ");
             //crea un nuevo hilo para despacharla por el socketCliente que le asignó
-
             new ServidorHTTP_Multihilo(socCliente).start();
-
-            //cierra la conexión entrante
-//            socCliente.close();
+            //Muestra mensaje una vez terminada la petición
             System.out.println("cliente atendido");
         }
     }
