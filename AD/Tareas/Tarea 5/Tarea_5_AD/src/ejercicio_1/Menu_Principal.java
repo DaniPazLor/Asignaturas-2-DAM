@@ -5,11 +5,6 @@
  */
 package ejercicio_1;
 
-import com.db4o.Db4oEmbedded;
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
-import com.db4o.config.EmbeddedConfiguration;
-import com.db4o.query.Query;
 import java.io.File;
 import java.util.Scanner;
 
@@ -30,12 +25,10 @@ public class Menu_Principal {
         
         BDJefeHjio bdJefeHijo = new BDJefeHjio();
         bdJefeHijo.crearBBDD(); 
-                /*Borramos los que había antes insertados*/
+        /*Borramos los que había antes insertados*/
         File fichero = new File("BDJefeHijo");
         fichero.delete();
-
-
-                   
+                  
         do{
         try{
         System.out.println("MENÚ DE OPCIONES EJERCICIO 1");
@@ -47,21 +40,20 @@ public class Menu_Principal {
         System.out.println("5.- Salir");
         System.out.println("Introduzca la opción deseada: ");
         op = teclado.nextInt();
-        
-        
+               
         switch (op) {
             case 1:
-                controlBBBDD.consultarTodosJefes(bdJefeHijo.baseDatos);
+                controlBBBDD.consultarJefes55(bdJefeHijo.baseDatos);
         
                 break;
             case 2:
-                
+                controlBBBDD.actualizarEdadMiguel(bdJefeHijo.baseDatos);
                 break;
             case 3:
-                
+                controlBBBDD.borrarMasAnios(bdJefeHijo.baseDatos);
                 break;
             case 4:
-                
+                controlBBBDD.consultarTodosJefes(bdJefeHijo.baseDatos);
                 break;
             case 5:
                 bdJefeHijo.baseDatos.close();

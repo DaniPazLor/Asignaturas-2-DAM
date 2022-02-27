@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejercicio_1;
 
 import com.db4o.Db4oEmbedded;
@@ -10,8 +5,8 @@ import com.db4o.ObjectContainer;
 import java.io.File;
 
 /**
- *
- * @author Pauda
+ * Clase para contener los datos y la creación de la base de datos
+ * @author Daniel Paz Lorenzo
  */
 public class BDJefeHjio {
     public ObjectContainer baseDatos;
@@ -24,7 +19,7 @@ public class BDJefeHjio {
         File fichero = new File("BDJefeHijo.db4o");
         fichero.delete();
         /*Este código anterior lo ponemos por si la base de datos ya existiera y quisiéramos empezar desde el principio.*/
-//        ObjectContainer baseDatos = Db4oEmbedded.openFile("BDJefeHijo");
+        //Creamos la base de datos embebida dentro del proyecto
         this.baseDatos = Db4oEmbedded.openFile("BDJefeHijo.db4o");
         
         baseDatos.store(new Jefe("Ángel", 5, 53, new Hijo("Gustavo", 7)));
