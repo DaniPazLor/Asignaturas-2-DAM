@@ -1,15 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejercicio_1;
 
 /**
+ * Clase que contiene los métodos y atributos de Hijo
  *
- * @author Pauda
+ * @author Daniel Paz Lorenzo
  */
 public class Hijo {
+
     String nombre;
     int edad;
 
@@ -39,12 +36,8 @@ public class Hijo {
 
     @Override
     public String toString() {
+        return " Hijo:" + "nombre " + nombre + ", edad " + edad + '}';
 
-          return " Hijo:" + "nombre " + nombre + ", edad " + edad + '}';  
-        
-        
     }
-    
 
-    
 }

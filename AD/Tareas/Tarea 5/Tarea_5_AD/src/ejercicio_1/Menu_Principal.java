@@ -1,36 +1,34 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejercicio_1;
 
 import java.io.File;
 import java.util.Scanner;
 
 /**
- *
- * @author DANILOR
+ * Clase que contiene el método principal de la aplicación. Menú de opciones 
+ * que hace de interfaz de la aplicación
+ * @author Daniel Paz Lorenzo
  */
 public class Menu_Principal {
 
     /**
+     * Método principal o main
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        //Declaración de variables y objetos 
         int op;
         boolean correcta=true;
         Scanner teclado = new Scanner(System.in);
         Controlador_BBDD controlBBBDD = new Controlador_BBDD();
-        
+        //Instanciamos la clase de la base de datos 
         BDJefeHjio bdJefeHijo = new BDJefeHjio();
         bdJefeHijo.crearBBDD(); 
-        /*Borramos los que había antes insertados*/
-        File fichero = new File("BDJefeHijo");
-        fichero.delete();
-                  
+
+        //Muestra por pantalla el menú de opciones y llamada a los métodos 
+        //necesarios según opción seleccionada del usuario
         do{
         try{
+        System.out.println("----------------------------");
         System.out.println("MENÚ DE OPCIONES EJERCICIO 1");
         System.out.println("----------------------------");
         System.out.println("1.- Visualizar los jefes con más de 55 años");

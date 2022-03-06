@@ -1,15 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejercicio_1;
 
 /**
+ * Clase que contiene los métodos y atributos de Jefe
  *
- * @author Pauda
+ * @author Daniel Paz Lorenzo
  */
 public class Jefe {
+
     private String nombre;
     private int anioEmpresa;
     private int edad;
@@ -62,6 +59,4 @@ public class Jefe {
         return "Nombre del jefe: " + nombre + ", años en la empresa=" + anioEmpresa + ", edad=" + edad + " " + hijo;
     }
 
-    
-    
 }
