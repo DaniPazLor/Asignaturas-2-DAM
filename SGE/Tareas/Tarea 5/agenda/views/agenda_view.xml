@@ -1,0 +1,51 @@
+<odoo>
+  <data>
+    <!-- DEFINICIÓN DE MENÚ -->
+        <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="agenda.action_window">
+      <field name="name">Agenda Telefónica</field>
+      <field name="res_model">agenda.agenda</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Top menu item -->
+    <menuitem name="Agenda" id="agenda.menu_root"/>
+
+    <!-- menu categories -->
+    <menuitem name="Agenda Telefónica" id="agenda.menu_agenda_tel" parent="agenda.menu_root" action="agenda.action_window"/>
+
+    <!-- VISTA ÁRBOL DE AGENDA -->
+    <record model="ir.ui.view" id="agenda.list_view">
+      <field name="name">agenda.telefonica.view.tree</field>
+      <field name="model">agenda.agenda</field>
+      <field name="arch" type="xml">
+        <tree multi_edit="1" sample="1">
+          <field name="Nombre"/>
+          <field name="Telefono"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- VISTA FORMULARIO DE AGENDA -->
+    <record model="ir.ui.view" id="agenda.form_view">
+      <field name="name">agenda.telefonica.view.form</field>
+      <field name="model">agenda.agenda</field>
+      <field name="arch" type="xml">
+        <form string="Formulario de agenda telefonica">
+          <sheet>
+            <separator string="Contacto telefónico"/>
+            <group>
+                <group>
+                  <field name="Nombre"/>
+                </group>
+                <group>
+                  <field name="Telefono"/>
+                </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+  </data>
+</odoo>
