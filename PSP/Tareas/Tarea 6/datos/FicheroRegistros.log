@@ -1,0 +1,30 @@
+mar 10, 2022 1:09:34 PM actividad_6_1.AplicacionPrincipal main
+ADVERTENCIA: El patron ([a-z]{8}) del usuario daniel es INcorrecto
+mar 10, 2022 1:09:55 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron ([a-z]{8}) del usuario danielin es correcto
+mar 10, 2022 1:09:58 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero danielon es correcto
+mar 10, 2022 1:11:21 PM actividad_6_1.AplicacionPrincipal main
+ADVERTENCIA: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero read.tx es INcorrecto
+mar 10, 2022 1:11:45 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero refranes.txt es correcto
+mar 10, 2022 1:11:45 PM actividad_6_1.AplicacionPrincipal visualizarFichero
+INFORMACIÓN: El fichero refranes.txt existe dentro de la carpeta C:\datos\
+mar 10, 2022 1:13:21 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron ([a-z]{8}) del usuario danielin es correcto
+mar 10, 2022 1:13:27 PM actividad_6_1.AplicacionPrincipal main
+ADVERTENCIA: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero read es INcorrecto
+mar 10, 2022 1:13:44 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero read.txt es correcto
+mar 10, 2022 1:14:59 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero read.txt es correcto
+mar 10, 2022 1:16:04 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron ([a-z]{8}) del usuario danielin es correcto
+mar 10, 2022 1:16:08 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero read.txt es correcto
+mar 10, 2022 1:16:53 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron ([a-z]{8}) del usuario danielin es correcto
+mar 10, 2022 1:16:57 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero read.txt es correcto
+mar 10, 2022 1:16:57 PM actividad_6_1.AplicacionPrincipal visualizarFichero
+ADVERTENCIA: El fichero read.txt NO existe dentro de la carpeta C:\datos\
