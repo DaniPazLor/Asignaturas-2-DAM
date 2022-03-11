@@ -1,0 +1,16 @@
+mar 11, 2022 10:40:40 PM actividad_6_1.AplicacionPrincipal main
+ADVERTENCIA: El patron ([a-z]{8}) del usuario daniel es INcorrecto
+mar 11, 2022 10:41:01 PM actividad_6_1.AplicacionPrincipal main
+ADVERTENCIA: El patron ([a-z]{8}) del usuario Danielin es INcorrecto
+mar 11, 2022 10:41:09 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron ([a-z]{8}) del usuario danielon es correcto
+mar 11, 2022 10:41:35 PM actividad_6_1.AplicacionPrincipal main
+ADVERTENCIA: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero refran.tx es INcorrecto
+mar 11, 2022 10:41:42 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero refran.txt es correcto
+mar 11, 2022 10:41:42 PM actividad_6_1.AplicacionPrincipal visualizarFichero
+ADVERTENCIA: El fichero refran.txt NO existe dentro de la carpeta C:\datos\
+mar 11, 2022 10:41:53 PM actividad_6_1.AplicacionPrincipal main
+INFORMACIÓN: El patron (^[a-zA-Z0-9]{1,8}.[a-zA-Z]{3}$) del fichero refranes.txt es correcto
+mar 11, 2022 10:41:53 PM actividad_6_1.AplicacionPrincipal visualizarFichero
+INFORMACIÓN: El fichero refranes.txt existe dentro de la carpeta C:\datos\

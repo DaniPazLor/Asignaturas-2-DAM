@@ -1,0 +1,3 @@
+-RepoFirmaPSP: alias/daniel | keypass/tarea6 | keystor/RepoFirmaPSP | storepass/damDistancia
+
+-RepoClaves: alias/daniel | file/daniel.cert | contraseña/damdist
