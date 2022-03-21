@@ -32,8 +32,8 @@ public class CalculandoTest extends TestCase {
      */
     public void testAdd() {
         System.out.println("add");
-        double number1 = 4.0;
-        double number2 = 3.0;
+        double number1 = 5.0;
+        double number2 = 2.0;
         Calculando instance = new Calculando();
         double expResult = 7.0;
         double result = instance.add(number1, number2);
@@ -46,12 +46,12 @@ public class CalculandoTest extends TestCase {
      */
     public void testSubtract() {
         System.out.println("subtract");
-        double number1 = 4.0;
-        double number2 = 3.0;
+        double number1 = 5.0;
+        double number2 = 2.0;
         Calculando instance = new Calculando();
-        double expResult = 1.0;
+        double expResult = 3.0;
         double result = instance.subtract(number1, number2);
-        assertEquals(expResult, result, 1.0);
+        assertEquals(expResult, result, 3.0);
 
     }
 
@@ -60,12 +60,12 @@ public class CalculandoTest extends TestCase {
      */
     public void testMultiply() {
         System.out.println("multiply");
-        double number1 = 4.0;
-        double number2 = 3.0;
+        double number1 = 5.0;
+        double number2 = 2.0;
         Calculando instance = new Calculando();
-        double expResult = 12.0;
+        double expResult = 10.0;
         double result = instance.multiply(number1, number2);
-        assertEquals(expResult, result, 12.0);
+        assertEquals(expResult, result, 10.0);
 
     }
 
@@ -74,8 +74,8 @@ public class CalculandoTest extends TestCase {
      */
     public void testDivide() {
         System.out.println("divide");
-        double number1 = 9.0;
-        double number2 = 3.0;
+        double number1 = 6.0;
+        double number2 = 2.0;
         Calculando instance = new Calculando();
         double expResult = 3.0;
         double result = instance.divide(number1, number2);
