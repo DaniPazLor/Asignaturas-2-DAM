@@ -18,7 +18,12 @@ import java.util.logging.Logger;
  * @author usuario
  */
 public class MatriculaBean implements Serializable {
-
+    //Datos para la conexión con mi base de datos de MySql
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/aerolinea";
+    static final String USER = "Dani";
+    static final String PASS = "5678";
+    private Connection Conexion;
     /*****************************************************
      * Propiedades del Bean.
      * Crearemos una propiedad por cada campo de la tabla de
@@ -175,6 +180,8 @@ public class MatriculaBean implements Serializable {
      */
     public void recargarFilas() throws ClassNotFoundException
     {
+        
+
         /*****************************
          * Comprobamos que el vector no esté ya rellenado
          */
@@ -185,7 +192,8 @@ public class MatriculaBean implements Serializable {
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/alumnos", "root", "usuario");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
+
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery ("select * from matriculas");
             while (rs.next())
