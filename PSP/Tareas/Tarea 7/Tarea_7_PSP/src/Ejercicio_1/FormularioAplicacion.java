@@ -21,12 +21,15 @@ public class FormularioAplicacion extends javax.swing.JFrame {
 
     String usuario;
     String password;
+    SecretKey clave;
 
     public FormularioAplicacion(String usuario, String pwd) throws NoSuchAlgorithmException {
         initComponents();
         etiquetaUsuario.setText(usuario);
         this.usuario = usuario;
         this.password = pwd;
+        //1. Crear e inicializar clave
+           this.clave  = generarClaveSercreta(usuario, password);
 //        generarClaveSercreta(usuario, pwd);
     }
 
@@ -81,6 +84,11 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         etiquetaUsuario.setText("jLabel3");
 
         botonMostrarDesencrip.setText("Mostrar Fichero Desencriptado");
+        botonMostrarDesencrip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonMostrarDesencripActionPerformed(evt);
+            }
+        });
 
         cuadroIntroText.setColumns(20);
         cuadroIntroText.setRows(5);
@@ -180,8 +188,7 @@ public class FormularioAplicacion extends javax.swing.JFrame {
             int bytesLeidos;
             String cadena = "";
 
-//1. Crear e inicializar clave
-            SecretKey clave = generarClaveSercreta(usuario, password);
+
 
 //Se Crea el objeto Cipher para cifrar, utilizando el algoritmo DES
             Cipher cifrador = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -235,6 +242,77 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonGuardarFicheroActionPerformed
 
+    private void botonMostrarDesencripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMostrarDesencripActionPerformed
+        descifrarFichero();
+               File ficheroCifrado = new File("fichero.descifrado");
+        try {
+            FileReader fis = new FileReader(ficheroCifrado);
+            BufferedReader bis = new BufferedReader(fis);
+            String linea;
+            while ((linea = bis.readLine()) != null) {
+                areaTexto.setText(linea);
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botonMostrarDesencripActionPerformed
+
+    public void descifrarFichero(){
+                try {
+            File file1 = new File("fichero.cifrado");
+            File file2 = new File("fichero.descifrado");
+            FileInputStream fe = null; //fichero de entrada
+            FileOutputStream fs = null; //fichero de salida
+            int bytesLeidos;
+            String cadena="";
+            Cipher cifrador = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            //3.- Poner cifrador en modo DESCIFRADO o DESENCRIPTACIÓN
+            cifrador.init(Cipher.DECRYPT_MODE, clave);
+            System.out.println("3.- Descifrar con AES el fichero: " + file1
+                    + ", y dejar en  " + file2);
+            fe = new FileInputStream(file1);
+            fs = new FileOutputStream(file2);
+            byte[] bufferClaro;
+            byte[] buffer = new byte[1000]; //array de bytes
+            //lee el fichero de 1k en 1k y pasa los fragmentos leidos al cifrador
+            bytesLeidos = fe.read(buffer, 0, 1000);
+            while (bytesLeidos != -1) {//mientras no se llegue al final del fichero
+                //pasa texto cifrado al cifrador y lo descifra, asignándolo a bufferClaro
+                bufferClaro = cifrador.update(buffer, 0, bytesLeidos);
+                fs.write(bufferClaro); //Graba el texto claro en fichero
+                bytesLeidos = fe.read(buffer, 0, 1000);
+                cadena= new String(bufferClaro, "UTF-8");
+                System.out.print(cadena);
+            }
+            
+            
+            bufferClaro = cifrador.doFinal(); //Completa el descifrado
+            cadena= new String(bufferClaro, "UTF-8");
+            System.out.println(cadena);
+            fs.write(bufferClaro); //Graba el final del texto claro, si lo hay
+            //cierra archivos
+            fe.close();
+            fs.close();
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public SecretKey generarClaveSercreta(String usuario, String pwd) throws NoSuchAlgorithmException {
 //        System.out.println("Generando clave AES...");
 //KeyGenerator generador = KeyGenerator.getInstance("AES");
