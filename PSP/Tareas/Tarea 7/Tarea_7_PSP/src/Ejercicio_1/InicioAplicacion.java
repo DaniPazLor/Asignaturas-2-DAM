@@ -5,6 +5,7 @@
  */
 package Ejercicio_1;
 
+import java.security.NoSuchAlgorithmException;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,7 +17,7 @@ public class InicioAplicacion {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchAlgorithmException {
         String usuario = JOptionPane.showInputDialog(null, "Introduzca nombre de usuario", "USUARIO", JOptionPane.INFORMATION_MESSAGE);
         String password = JOptionPane.showInputDialog(null, "Introduzca password", "PASSWORD", JOptionPane.WARNING_MESSAGE);
         

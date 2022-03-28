@@ -6,36 +6,29 @@
 package Ejercicio_1;
 
 import java.awt.GraphicsConfiguration;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import static java.lang.System.gc;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-
+import javax.crypto.*;
 
 /**
  *
  * @author Pauda
  */
 public class FormularioAplicacion extends javax.swing.JFrame {
-
-    public FormularioAplicacion(String usuario, String pwd) {
+    String usuario;
+    String password;
+    
+    
+    public FormularioAplicacion(String usuario, String pwd) throws NoSuchAlgorithmException {
         initComponents();
         etiquetaUsuario.setText(usuario);
+        this.usuario=usuario;
+        this.password=pwd;
+//        generarClaveSercreta(usuario, pwd);
     }
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,12 +42,13 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         areaTexto = new javax.swing.JTextArea();
         cuadroIntroText = new javax.swing.JTextField();
-        botonMostrarTexto = new javax.swing.JButton();
+        botonMostrarEncriptado = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         botonGuardarFichero = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         etiquetaUsuario = new javax.swing.JLabel();
+        botonMostrarDesencrip = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,16 +63,16 @@ public class FormularioAplicacion extends javax.swing.JFrame {
             }
         });
 
-        botonMostrarTexto.setText("Mostrar Texto");
-        botonMostrarTexto.addActionListener(new java.awt.event.ActionListener() {
+        botonMostrarEncriptado.setText("Mostrar Fichero Encriptado");
+        botonMostrarEncriptado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonMostrarTextoActionPerformed(evt);
+                botonMostrarEncriptadoActionPerformed(evt);
             }
         });
 
         jLabel1.setText("Introduzca texto");
 
-        botonGuardarFichero.setText("Guardar Fichero");
+        botonGuardarFichero.setText("Guardar Fichero Encriptado");
         botonGuardarFichero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonGuardarFicheroActionPerformed(evt);
@@ -88,6 +82,8 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         jLabel2.setText("BIENVENIDO ");
 
         etiquetaUsuario.setText("jLabel3");
+
+        botonMostrarDesencrip.setText("Mostrar Fichero Desencriptado");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,19 +98,22 @@ public class FormularioAplicacion extends javax.swing.JFrame {
                         .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(botonMostrarTexto)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-                                    .addComponent(cuadroIntroText))
-                                .addGap(178, 178, 178)
-                                .addComponent(botonGuardarFichero))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(82, 82, 82)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(etiquetaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cuadroIntroText, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(botonGuardarFichero))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(botonMostrarEncriptado, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(botonMostrarDesencrip))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 24, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -122,22 +121,24 @@ public class FormularioAplicacion extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel1))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
-                        .addComponent(etiquetaUsuario))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(botonGuardarFichero)
-                            .addComponent(cuadroIntroText, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addComponent(botonMostrarTexto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(etiquetaUsuario)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cuadroIntroText, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonGuardarFichero))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonMostrarEncriptado)
+                    .addComponent(botonMostrarDesencrip))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -148,14 +149,29 @@ public class FormularioAplicacion extends javax.swing.JFrame {
 
     }//GEN-LAST:event_cuadroIntroTextActionPerformed
 
-    private void botonMostrarTextoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMostrarTextoActionPerformed
-        areaTexto.setText(cuadroIntroText.getText());
-    }//GEN-LAST:event_botonMostrarTextoActionPerformed
+    private void botonMostrarEncriptadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMostrarEncriptadoActionPerformed
+//        areaTexto.setText(cuadroIntroText.getText());
+        File ficheroCifrado = new File("fichero.cifrado");
+        try {
+            FileInputStream fis = new FileInputStream(ficheroCifrado);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            int leido=bis.read();
+            while(leido>0){
+                areaTexto.setText(String.valueOf(leido));
+            }
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_botonMostrarEncriptadoActionPerformed
 
     private void botonGuardarFicheroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarFicheroActionPerformed
 
         try {
-            File file = new File("c:\\cripto\\fichero");
+            File file = new File("fichero");
 //        FileInputStream fe = null; //fichero de entrada
             FileOutputStream fsc = null; //fichero de salida cifrado
             FileOutputStream fs = null; //fichero de salida normal
@@ -163,21 +179,13 @@ public class FormularioAplicacion extends javax.swing.JFrame {
             String cadena = "";
 
 //1. Crear e inicializar clave
-            System.out.println("1.-Genera clave DES");
-//crea un objeto para generar la clave usando algoritmo DES
-            KeyGenerator keyGen = KeyGenerator.getInstance("DES");
-            keyGen.init(56); //se indica el tamaño de la clave
-            SecretKey clave = keyGen.generateKey(); //genera la clave privada
-
-            System.out.println("Clave");
-            mostrarBytes(clave.getEncoded()); //muestra la clave
-            System.out.println();
+        SecretKey clave = generarClaveSercreta(usuario, password);
 
 //Se Crea el objeto Cipher para cifrar, utilizando el algoritmo DES
-            Cipher cifrador = Cipher.getInstance("DES");
+            Cipher cifrador = Cipher.getInstance("AES/ECB/PKCS5Padding");
 //Se inicializa el cifrador en modo CIFRADO o ENCRIPTACIÓN
             cifrador.init(Cipher.ENCRYPT_MODE, clave);
-            System.out.println("2.- Cifrar con DES el fichero: " + file
+            System.out.println("2.- Cifrar con AES el fichero: " + file
                     + ", y dejar resultado en " + file + ".cifrado");
 //declaración  de objetos
             byte[] buffer; //array de bytes
@@ -199,11 +207,11 @@ public class FormularioAplicacion extends javax.swing.JFrame {
 //        }
 //            for (int i = 0; i < buffer.length; i++) {
 
-                bufferCifrado = cifrador.update(buffer);
-                fsc.write(bufferCifrado); //Graba el texto cifrado en fichero
-                fs.write(buffer); //Graba el texto cifrado en fichero
-                cadena = new String(bufferCifrado, "UTF-8");
-                System.out.print(cadena);
+            bufferCifrado = cifrador.update(buffer);
+            fsc.write(bufferCifrado); //Graba el texto cifrado en fichero
+            fs.write(buffer); //Graba el texto cifrado en fichero
+            cadena = new String(bufferCifrado, "UTF-8");
+            System.out.print(cadena);
 //            }
 //        bufferCifrado = cifrador.doFinal(); //Completa el cifrado
 //        cadena = new String(bufferCifrado, "UTF-8");
@@ -224,110 +232,42 @@ public class FormularioAplicacion extends javax.swing.JFrame {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_botonGuardarFicheroActionPerformed
-//
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(FormularioAplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(FormularioAplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(FormularioAplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(FormularioAplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new FormularioAplicacion().setVisible(true);
-//            }
-//        });
-//    }
 
-//    public void guardarFicheroCifrado() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, FileNotFoundException, IOException, IllegalBlockSizeException, BadPaddingException {
-//        File file = new File("c:\\cripto\\fichero");
-////        FileInputStream fe = null; //fichero de entrada
-//        FileOutputStream fsc = null; //fichero de salida cifrado
-//        FileOutputStream fs = null; //fichero de salida normal
-//        int bytesLeidos;
-//        String cadena = "";
-//
-//        //1. Crear e inicializar clave
-//        System.out.println("1.-Genera clave DES");
-//        //crea un objeto para generar la clave usando algoritmo DES
-//        KeyGenerator keyGen = KeyGenerator.getInstance("DES");
-//        keyGen.init(56); //se indica el tamaño de la clave
-//        SecretKey clave = keyGen.generateKey(); //genera la clave privada
-//
-//        System.out.println("Clave");
-//        mostrarBytes(clave.getEncoded()); //muestra la clave
-//        System.out.println();
-//
-//        //Se Crea el objeto Cipher para cifrar, utilizando el algoritmo DES
-//        Cipher cifrador = Cipher.getInstance("DES");
-//        //Se inicializa el cifrador en modo CIFRADO o ENCRIPTACIÓN
-//        cifrador.init(Cipher.ENCRYPT_MODE, clave);
-//        System.out.println("2.- Cifrar con DES el fichero: " + file
-//                + ", y dejar resultado en " + file + ".cifrado");
-////declaración  de objetos
-//        byte[] buffer; //array de bytes
-//        byte[] bufferCifrado;
-//        buffer = cuadroIntroText.getText().getBytes();
-////        fe = new FileInputStream(file); //objeto fichero de entrada
-//        fsc = new FileOutputStream(file + ".cifrado"); //fichero de salida
-//        fs = new FileOutputStream(file); //fichero de salida
-//        //lee el fichero de 1k en 1k y pasa los fragmentos leidos al cifrador
-////        bytesLeidos = fe.read(buffer, 0, 1000);
-////        while (bytesLeidos != -1) {//mientras no se llegue al final del fichero
-////            //pasa texto claro al cifrador y lo cifra, asignándolo a bufferCifrado
-////            bufferCifrado = cifrador.update(buffer, 0, bytesLeidos);
-////            fs.write(bufferCifrado); //Graba el texto cifrado en fichero
-////            bytesLeidos = fe.read(buffer, 0, 1000);
-////            System.out.println(bufferCifrado);
-////            cadena = new String(bufferCifrado, "UTF-8");
-////            System.out.print(cadena);
-////        }
-//        for (int i = 0; i < buffer.length; i++) {
-//
-//            bufferCifrado = cifrador.update(buffer);
-//            fsc.write(bufferCifrado); //Graba el texto cifrado en fichero
-//            fs.write(buffer); //Graba el texto cifrado en fichero
-//            cadena = new String(bufferCifrado, "UTF-8");
-//            System.out.print(cadena);
-//        }
-////        bufferCifrado = cifrador.doFinal(); //Completa el cifrado
-////        cadena = new String(bufferCifrado, "UTF-8");
-////        System.out.print(cadena);
-////        fs.write(bufferCifrado); //Graba el final del texto cifrado, si lo hay
-//        //Cierra ficheros
-////        fe.close();
-//        fs.close();
-//    }
+    public SecretKey generarClaveSercreta(String usuario, String pwd) throws NoSuchAlgorithmException {
+//        System.out.println("Generando clave AES...");
+//KeyGenerator generador = KeyGenerator.getInstance("AES");
+//generador.init(128);
+//Key claveAES = generador.generateKey();
+//System.out.println("Formato: "+claveAES.getFormat());
+// creating the object of SecureRandom
+        KeyGenerator generador = KeyGenerator.getInstance("AES");
+        SecureRandom sr = new SecureRandom();
 
-    //método que muestra bytes
+        // Declaring the string variable
+        String cadena = usuario + pwd;
+
+        // Declaring the byte Array b
+        byte[] b = cadena.getBytes();
+
+        // Reseeding the random object
+        sr.setSeed(b);
+
+        generador.init(128, sr);
+        SecretKey claveAES = generador.generateKey();
+        System.out.println("Formato: " + claveAES.getFormat());
+        System.out.println("Clave");
+        mostrarBytes(claveAES.getEncoded());
+        return claveAES;
+    }
+
     public static void mostrarBytes(byte[] buffer) {
         System.out.write(buffer, 0, buffer.length);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaTexto;
     private javax.swing.JButton botonGuardarFichero;
-    private javax.swing.JButton botonMostrarTexto;
+    private javax.swing.JButton botonMostrarDesencrip;
+    private javax.swing.JButton botonMostrarEncriptado;
     private javax.swing.JTextField cuadroIntroText;
     private javax.swing.JLabel etiquetaUsuario;
     private javax.swing.JLabel jLabel1;
