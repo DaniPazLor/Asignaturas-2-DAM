@@ -1,36 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Ejercicio_1;
+package cifradoAES;
 
-import java.awt.GraphicsConfiguration;
 import java.io.*;
-import static java.lang.System.gc;
 import java.security.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.*;
 
 /**
+ * Clase que hereda de JFrame y muestra una vista de tipo formulario con botones
+ * para interactuar con el usuario y cuadros de texto para recoger información y
+ * mostrarla.
  *
- * @author Pauda
+ * @author Daniel Paz Lorenzo
  */
 public class FormularioAplicacion extends javax.swing.JFrame {
 
-    String usuario;
-    String password;
-    SecretKey clave;
+    //Declaración de variables de clase
+    private String usuario;
+    private String password;
+    private SecretKey clave;
+    private File fichero;
 
+    /**
+     * Constructor de la clase FormularioAplicacion
+     *
+     * @param usuario insertado por el usuario
+     * @param pwd insertado por el usuario
+     * @throws NoSuchAlgorithmException
+     */
     public FormularioAplicacion(String usuario, String pwd) throws NoSuchAlgorithmException {
         initComponents();
+        //Inicializar variables de clase
         etiquetaUsuario.setText(usuario);
+        etiquetaPwd.setText(pwd);
         this.usuario = usuario;
         this.password = pwd;
-        //1. Crear e inicializar clave
-           this.clave  = generarClaveSercreta(usuario, password);
-//        generarClaveSercreta(usuario, pwd);
+        this.fichero = new File("fichero");
+        //Crear e inicializar clave
+        this.clave = generarClaveSercreta(usuario, password);
     }
 
     /**
@@ -46,14 +53,16 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         areaTexto = new javax.swing.JTextArea();
         botonMostrarEncriptado = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        botonGuardarFichero = new javax.swing.JButton();
+        botonGuardarFicheros = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         etiquetaUsuario = new javax.swing.JLabel();
-        botonMostrarDesencrip = new javax.swing.JButton();
+        botonMostrarFicDesencrip = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         cuadroIntroText = new javax.swing.JTextArea();
         jSeparator2 = new javax.swing.JSeparator();
+        etiquetaMenPwd = new javax.swing.JLabel();
+        etiquetaPwd = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,29 +79,34 @@ public class FormularioAplicacion extends javax.swing.JFrame {
 
         jLabel1.setText("Introducir el texto a encriptar:");
 
-        botonGuardarFichero.setText("Guardar Fichero Encriptado");
-        botonGuardarFichero.addActionListener(new java.awt.event.ActionListener() {
+        botonGuardarFicheros.setText("Guardar Fichero Encriptado");
+        botonGuardarFicheros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonGuardarFicheroActionPerformed(evt);
+                botonGuardarFicherosActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("BIENVENIDO ");
 
-        etiquetaUsuario.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
-        etiquetaUsuario.setText("jLabel3");
+        etiquetaUsuario.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
+        etiquetaUsuario.setText("usuario");
 
-        botonMostrarDesencrip.setText("Mostrar Fichero Desencriptado");
-        botonMostrarDesencrip.addActionListener(new java.awt.event.ActionListener() {
+        botonMostrarFicDesencrip.setText("Mostrar Fichero Desencriptado");
+        botonMostrarFicDesencrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonMostrarDesencripActionPerformed(evt);
+                botonMostrarFicDesencripActionPerformed(evt);
             }
         });
 
         cuadroIntroText.setColumns(20);
         cuadroIntroText.setRows(5);
         jScrollPane2.setViewportView(cuadroIntroText);
+
+        etiquetaMenPwd.setText("Password");
+
+        etiquetaPwd.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        etiquetaPwd.setText("pwd");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -106,21 +120,24 @@ public class FormularioAplicacion extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(botonMostrarEncriptado, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(19, 19, 19)
-                        .addComponent(botonMostrarDesencrip, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(botonMostrarFicDesencrip, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jSeparator2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(etiquetaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(botonGuardarFichero))))
-                        .addGap(0, 17, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(botonGuardarFicheros)))
+                        .addGap(0, 17, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(etiquetaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(etiquetaMenPwd)
+                        .addGap(10, 10, 10)
+                        .addComponent(etiquetaPwd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -129,28 +146,27 @@ public class FormularioAplicacion extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(etiquetaUsuario))
+                    .addComponent(etiquetaUsuario)
+                    .addComponent(etiquetaMenPwd)
+                    .addComponent(etiquetaPwd, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(botonGuardarFichero)
-                                .addGap(119, 119, 119))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonGuardarFicheros)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonMostrarEncriptado)
-                    .addComponent(botonMostrarDesencrip))
+                    .addComponent(botonMostrarFicDesencrip))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -159,17 +175,24 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que resuelve el evento generado al pulsar el botón de mostrar el
+     * fichero encriptado mostrandolo en el area de texto
+     *
+     * @param evt
+     */
     private void botonMostrarEncriptadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMostrarEncriptadoActionPerformed
-//        areaTexto.setText(cuadroIntroText.getText());
-        File ficheroCifrado = new File("fichero.cifrado");
+
+        File ficheroCifrado = new File(fichero + ".cifrado");
         try {
+            //Flujo de entrada de fichero
             FileReader fis = new FileReader(ficheroCifrado);
             BufferedReader bis = new BufferedReader(fis);
             String linea;
+            //Recorre el fichero y lo muestra en el area de texto
             while ((linea = bis.readLine()) != null) {
                 areaTexto.setText(linea);
             }
-
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -178,74 +201,29 @@ public class FormularioAplicacion extends javax.swing.JFrame {
 
     }//GEN-LAST:event_botonMostrarEncriptadoActionPerformed
 
-    private void botonGuardarFicheroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarFicheroActionPerformed
+    /**
+     * Método que responde al evento de pulsar botón y guarda los sin encriptar
+     * y en encriptado en sus respectivos ficheros
+     *
+     * @param evt
+     */
+    private void botonGuardarFicherosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarFicherosActionPerformed
 
+        guardarFichero();
+        encriptarFichero();
+    }//GEN-LAST:event_botonGuardarFicherosActionPerformed
+
+    /**
+     * Método que recoge el evento de botón para mostrar el fichero
+     * desencriptado
+     *
+     * @param evt
+     */
+    private void botonMostrarFicDesencripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMostrarFicDesencripActionPerformed
+
+        File ficheroCifrado = descifrarFichero();
         try {
-            File file = new File("fichero");
-            FileInputStream fe = null; //fichero de entrada
-            FileOutputStream fsc = null; //fichero de salida cifrado
-            FileOutputStream fs = null; //fichero de salida normal
-            int bytesLeidos;
-            String cadena = "";
-
-
-
-//Se Crea el objeto Cipher para cifrar, utilizando el algoritmo DES
-            Cipher cifrador = Cipher.getInstance("AES/ECB/PKCS5Padding");
-//Se inicializa el cifrador en modo CIFRADO o ENCRIPTACIÓN
-            cifrador.init(Cipher.ENCRYPT_MODE, clave);
-            System.out.println("2.- Cifrar con AES el fichero: " + file
-                    + ", y dejar resultado en " + file + ".cifrado");
-//Guardamos texto introducido en fichero
-            byte[] bufferIn; //array de bytes            
-            bufferIn = cuadroIntroText.getText().getBytes();
-            fs = new FileOutputStream(file); //fichero de salida
-            fs.write(bufferIn); //Graba el texto introducido en fichero
-
-//declaración  de objetos
-            byte[] bufferOut = new byte[1000]; //array de bytes
-            byte[] bufferCifrado;
-            fe = new FileInputStream(file); //objeto fichero de entrada
-            fs = new FileOutputStream(file + ".cifrado"); //fichero de salida
-//lee el fichero de 1k en 1k y pasa los fragmentos leidos al cifrador
-            bytesLeidos = fe.read(bufferOut, 0, 1000);
-            while (bytesLeidos != -1) {//mientras no se llegue al final del fichero
-                //pasa texto claro al cifrador y lo cifra, asignándolo a bufferCifrado
-                bufferCifrado = cifrador.update(bufferOut, 0, bytesLeidos);
-                fs.write(bufferCifrado); //Graba el texto cifrado en fichero
-                bytesLeidos = fe.read(bufferOut, 0, 1000);
-                System.out.println(bufferCifrado);
-                cadena = new String(bufferCifrado, "UTF-8");
-                System.out.print(cadena);
-            }
-            bufferCifrado = cifrador.doFinal(); //Completa el cifrado
-            cadena = new String(bufferCifrado, "UTF-8");
-            System.out.print(cadena);
-            fs.write(bufferCifrado); //Graba el final del texto cifrado, si lo hay
-//Cierra ficheros
-            fe.close();
-            fs.close();
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex) {
-            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
-            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_botonGuardarFicheroActionPerformed
-
-    private void botonMostrarDesencripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMostrarDesencripActionPerformed
-        descifrarFichero();
-               File ficheroCifrado = new File("fichero.descifrado");
-        try {
+            //Lee fichero y lo muestra en el area de texto
             FileReader fis = new FileReader(ficheroCifrado);
             BufferedReader bis = new BufferedReader(fis);
             String linea;
@@ -258,44 +236,68 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_botonMostrarDesencripActionPerformed
+    }//GEN-LAST:event_botonMostrarFicDesencripActionPerformed
 
-    public void descifrarFichero(){
-                try {
-            File file1 = new File("fichero.cifrado");
-            File file2 = new File("fichero.descifrado");
-            FileInputStream fe = null; //fichero de entrada
-            FileOutputStream fs = null; //fichero de salida
+    /**
+     * Método para guardar en un fichero el texto recogido del usuario
+     */
+    public void guardarFichero() {
+
+        try {
+            //Guardamos texto introducido en fichero
+            byte[] bufferIn; //array de bytes
+            bufferIn = cuadroIntroText.getText().getBytes();//Recoger texto del textBox
+            FileOutputStream fs = new FileOutputStream(fichero); //flujo de salida
+            fs.write(bufferIn); //Graba el texto introducido en fichero
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    /**
+     * Método que lee "fichero", lo encripta con algoritmo AES y lo guarda en
+     * "fichero.cifrado"
+     */
+    public void encriptarFichero() {
+
+        try {
             int bytesLeidos;
-            String cadena="";
+            String cadena = "";
+
+            //Creación de objeto Cipher para cifrar, utilizando el algoritmo AES
             Cipher cifrador = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            //3.- Poner cifrador en modo DESCIFRADO o DESENCRIPTACIÓN
-            cifrador.init(Cipher.DECRYPT_MODE, clave);
-            System.out.println("3.- Descifrar con AES el fichero: " + file1
-                    + ", y dejar en  " + file2);
-            fe = new FileInputStream(file1);
-            fs = new FileOutputStream(file2);
-            byte[] bufferClaro;
-            byte[] buffer = new byte[1000]; //array de bytes
+            //Inicialización del cifrador en modo CIFRADO o ENCRIPTACIÓN
+            cifrador.init(Cipher.ENCRYPT_MODE, clave);
+            System.out.println("\nCifrar con AES el " + fichero
+                    + ", y dejar resultado en " + fichero + ".cifrado");
+
+            //declaración  de objetos
+            byte[] bufferOut = new byte[1000]; //array de bytes
+            byte[] bufferCifrado;
+            FileInputStream fe = new FileInputStream(fichero); //flujo de entrada 
+            FileOutputStream fsc = new FileOutputStream(fichero + ".cifrado"); //flujo de salida
+
             //lee el fichero de 1k en 1k y pasa los fragmentos leidos al cifrador
-            bytesLeidos = fe.read(buffer, 0, 1000);
+            bytesLeidos = fe.read(bufferOut, 0, 1000);
             while (bytesLeidos != -1) {//mientras no se llegue al final del fichero
-                //pasa texto cifrado al cifrador y lo descifra, asignándolo a bufferClaro
-                bufferClaro = cifrador.update(buffer, 0, bytesLeidos);
-                fs.write(bufferClaro); //Graba el texto claro en fichero
-                bytesLeidos = fe.read(buffer, 0, 1000);
-                cadena= new String(bufferClaro, "UTF-8");
+                //pasa texto claro al cifrador y lo cifra, asignándolo a bufferCifrado
+                bufferCifrado = cifrador.update(bufferOut, 0, bytesLeidos);
+                fsc.write(bufferCifrado); //Graba el texto cifrado en fichero
+                bytesLeidos = fe.read(bufferOut, 0, 1000);
+                System.out.println(bufferCifrado);
+                cadena = new String(bufferCifrado, "UTF-8");
                 System.out.print(cadena);
             }
-            
-            
-            bufferClaro = cifrador.doFinal(); //Completa el descifrado
-            cadena= new String(bufferClaro, "UTF-8");
-            System.out.println(cadena);
-            fs.write(bufferClaro); //Graba el final del texto claro, si lo hay
-            //cierra archivos
+            bufferCifrado = cifrador.doFinal(); //Completa el cifrado
+            cadena = new String(bufferCifrado, "UTF-8");
+            System.out.print(cadena);
+            fsc.write(bufferCifrado); //Graba el final del texto cifrado, si lo hay
+            //Cierra flujos
             fe.close();
-            fs.close();
+            fsc.close();
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchPaddingException ex) {
@@ -312,27 +314,90 @@ public class FormularioAplicacion extends javax.swing.JFrame {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    /**
+     * Método para descifrar el fichero cifrado
+     *
+     * @return
+     */
+    public File descifrarFichero() {
+        //Creamos los ficheros de cifrado y descifrado
+        File ficheroCifrado = new File(fichero + ".cifrado");
+        File ficheroDescifrado = new File(fichero + ".descifrado");
+        try {
+            int bytesLeidos;
+            String cadena = "";
+            //Crear objeto Cipher con algoritmo AES
+            Cipher cifrador = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            //Poner cifrador en modo DESCIFRADO o DESENCRIPTACIÓN
+            cifrador.init(Cipher.DECRYPT_MODE, clave);
+            System.out.println("\nDescifrar con AES el " + ficheroCifrado
+                    + ", y dejar en  " + ficheroDescifrado);
+
+            //declaración  de objetos
+            FileInputStream fe = new FileInputStream(ficheroCifrado);
+            FileOutputStream fs = new FileOutputStream(ficheroDescifrado);
+            byte[] bufferClaro;
+            byte[] buffer = new byte[1000]; //array de bytes
+
+            //lee el fichero de 1k en 1k y pasa los fragmentos leidos al cifrador
+            bytesLeidos = fe.read(buffer, 0, 1000);
+            while (bytesLeidos != -1) {//mientras no se llegue al final del fichero
+                //pasa texto cifrado al cifrador y lo descifra, asignándolo a bufferClaro
+                bufferClaro = cifrador.update(buffer, 0, bytesLeidos);
+                fs.write(bufferClaro); //Graba el texto claro en fichero
+                bytesLeidos = fe.read(buffer, 0, 1000);
+                cadena = new String(bufferClaro, "UTF-8");
+                System.out.print(cadena);
+            }
+            bufferClaro = cifrador.doFinal(); //Completa el descifrado
+            cadena = new String(bufferClaro, "UTF-8");
+            System.out.println(cadena);
+            fs.write(bufferClaro); //Graba el final del texto claro, si lo hay
+            //Cerrar flujos
+            fe.close();
+            fs.close();
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ficheroDescifrado;
+    }
+
+    /**
+     * Método para crear una clave de 128 bits a partir de un número aleatorio
+     * con semilla la suma de las cadenas usuario y password
+     *
+     * @param usuario
+     * @param pwd
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     public SecretKey generarClaveSercreta(String usuario, String pwd) throws NoSuchAlgorithmException {
-//        System.out.println("Generando clave AES...");
-//KeyGenerator generador = KeyGenerator.getInstance("AES");
-//generador.init(128);
-//Key claveAES = generador.generateKey();
-//System.out.println("Formato: "+claveAES.getFormat());
-// creating the object of SecureRandom
-        KeyGenerator generador = KeyGenerator.getInstance("AES");
-        SecureRandom sr = new SecureRandom();
-
-        // Declaring the string variable
+        //Suma de las cadenas
         String cadena = usuario + pwd;
-
-        // Declaring the byte Array b
+        //Convertir cadena a array de bytes
         byte[] b = cadena.getBytes();
 
-        // Reseeding the random object
+        //Declarar objeto SecureRandom con semilla el array de bytes
+        SecureRandom sr = new SecureRandom();
         sr.setSeed(b);
 
+        //Declaración de objeto KeyGenerator con algoritmo AES e inicializado a 128 bits con número de seguridad aleatorio
+        KeyGenerator generador = KeyGenerator.getInstance("AES");
         generador.init(128, sr);
+        //Crear objeto SecretKey a través de método de KeyGenerator
         SecretKey claveAES = generador.generateKey();
         System.out.println("Formato: " + claveAES.getFormat());
         System.out.println("Clave");
@@ -345,10 +410,12 @@ public class FormularioAplicacion extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaTexto;
-    private javax.swing.JButton botonGuardarFichero;
-    private javax.swing.JButton botonMostrarDesencrip;
+    private javax.swing.JButton botonGuardarFicheros;
     private javax.swing.JButton botonMostrarEncriptado;
+    private javax.swing.JButton botonMostrarFicDesencrip;
     private javax.swing.JTextArea cuadroIntroText;
+    private javax.swing.JLabel etiquetaMenPwd;
+    private javax.swing.JLabel etiquetaPwd;
     private javax.swing.JLabel etiquetaUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
