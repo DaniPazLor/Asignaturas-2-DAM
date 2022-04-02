@@ -195,8 +195,8 @@ public class AlumnoBean implements Serializable {
             Alumnos.removeAllElements();
         }
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/alumnos", "root", "usuario");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "root", "br4dplor");
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery ("select * from alumnos");
             while (rs.next())
@@ -322,8 +322,8 @@ public class AlumnoBean implements Serializable {
     public void addAlumno() throws ClassNotFoundException
     {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/alumnos", "root", "usuario");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "root", "br4dplor");
             PreparedStatement s = con.prepareStatement("insert into alumnos values (?,?,?,?,?)");
 
             s.setString(1, DNI);

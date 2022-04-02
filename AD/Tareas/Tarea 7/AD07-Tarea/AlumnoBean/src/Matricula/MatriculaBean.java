@@ -19,6 +19,11 @@ import java.util.logging.Logger;
  */
 public class MatriculaBean implements Serializable {
 
+        //Datos para la conexión con mi base de datos de MySql
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/bbddtarea7";
+    static final String USER = "Dani";
+    static final String PASS = "5678";
     /*****************************************************
      * Propiedades del Bean.
      * Crearemos una propiedad por cada campo de la tabla de
@@ -184,8 +189,10 @@ public class MatriculaBean implements Serializable {
         }
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/alumnos", "root", "usuario");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "root", "br4dplor");
+
+
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery ("select * from matriculas");
             while (rs.next())
@@ -232,8 +239,8 @@ public class MatriculaBean implements Serializable {
             Matriculas.removeAllElements();
         }
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/alumnos", "root", "usuario");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "root", "br4dplor");
             PreparedStatement s = con.prepareStatement("select * from matriculas where DNI = ?");
             s.setString(1, nDNI);
             ResultSet rs = s.executeQuery();
@@ -335,8 +342,8 @@ public class MatriculaBean implements Serializable {
     public void addMatricula() throws ClassNotFoundException
     {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/alumnos", "root", "usuario");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "root", "br4dplor");
             PreparedStatement s = con.prepareStatement("insert into matriculas values (?,?,?,?)");
 
             s.setString(1, DNI);
@@ -350,9 +357,10 @@ public class MatriculaBean implements Serializable {
             /*En función del modo recargamos los datos de todas las matriculas
              * o de las de un DNI concreto.
              */
-            if (modo)
+            if (modo){
                 recargarFilas();
-            else
+
+            }else
                 recargarDNI(DNI);
         }
         catch(SQLException ex)
