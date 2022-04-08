@@ -1,0 +1,15 @@
+# %W% %E%
+
+This directory contains the source code to build JMStudio, JMFRegistry and
+the Export sample applications that come with the JMF installation.
+
+To build on solaris:
+1) Modify mk-jmapps.sh to correctly set the environment variables at the
+   beginning of the script.
+2) chmod u+x mk-jmapps.sh
+3) run ./mk-jmapps.sh
+
+To build on Win32:
+1) Modify mk-jmapps.bat to correctly set the environment variables at the
+   beginning of the script.
+2) run .\mk-japps.bat
