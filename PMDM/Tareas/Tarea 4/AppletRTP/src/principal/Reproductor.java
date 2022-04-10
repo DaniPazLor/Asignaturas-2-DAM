@@ -17,8 +17,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.media.CannotRealizeException;
 import javax.media.Codec;
+import javax.media.ControllerEvent;
+import javax.media.ControllerListener;
 import javax.media.Format;
 import javax.media.Manager;
+import javax.media.MediaLocator;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.PlugInManager;
@@ -38,13 +41,16 @@ public class Reproductor extends javax.swing.JFrame implements ChangeListener{
 
     URL url;
     Player reproductor;
+    MediaLocator mediaLocator=null;
 
     /**
      * Creates new form TransmisorRTP
      */
-    public Reproductor() {
+    public Reproductor() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         initComponents();
         jSlider1.addChangeListener(this);
+        configurarCodecMP3();
+        
     }
 
     /**
@@ -66,6 +72,7 @@ public class Reproductor extends javax.swing.JFrame implements ChangeListener{
         jMenu1 = new javax.swing.JMenu();
         jMenuItemAbrir = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItemRTP = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,12 +121,21 @@ public class Reproductor extends javax.swing.JFrame implements ChangeListener{
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Salir");
+        jMenu2.setText("Rtp");
         jMenu2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenu2ActionPerformed(evt);
             }
         });
+
+        jMenuItemRTP.setText("Abrir Sesion RTP");
+        jMenuItemRTP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRTPActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItemRTP);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -163,46 +179,10 @@ public class Reproductor extends javax.swing.JFrame implements ChangeListener{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonReproducirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonReproducirActionPerformed
-        try {
-            /* Esta es la direccion del codec que decodifica los mp3 */
-            String jffmpegAudioDecoder = "net.sourceforge.jffmpeg.AudioDecoder";
-            /* Cargamos el codec y lo guardamos en un objeto de tipo Codec */
-            Codec codecAudio = (Codec) Class.forName(jffmpegAudioDecoder).newInstance();
-            /* Agregamos los codec al PlugInManager */
-            PlugInManager.addPlugIn(jffmpegAudioDecoder,
-                    codecAudio.getSupportedInputFormats(),
-                    new Format[]{new AudioFormat("LINEAR")},
-                    PlugInManager.CODEC);
-            
-            Manager.setHint( Manager.LIGHTWEIGHT_RENDERER, true );
-             reproductor = Manager.createRealizedPlayer(url);
-            
-//             jPanelReproductor.setPreferredSize(jPanelReproductor.getMaximumSize());
-            Component control = reproductor.getControlPanelComponent();
+       
 
-            
-            control.setSize(jPanelReproductor.getPreferredSize());
-             jPanelReproductor.add(control, BorderLayout.CENTER);
-//             jPanelReproductor.setSize(300, 300);
-//             jPanelReproductor.setVisible(true);
-////            this.add(jPanelReproductor);
-//            reproductor.realize();
-            reproductor.start();
-           
-            
-        } catch (IOException ex) {
-            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoPlayerException ex) {
-            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CannotRealizeException ex) {
-            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+             panelControl();
+
     }//GEN-LAST:event_jButtonReproducirActionPerformed
 
     private void jMenuItemAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirActionPerformed
@@ -214,15 +194,48 @@ public class Reproductor extends javax.swing.JFrame implements ChangeListener{
             jTextArea1.setText(fichero.getAbsolutePath());
 
             url = new URL("file", null, fichero.getAbsolutePath());
+            
+             Manager.setHint( Manager.LIGHTWEIGHT_RENDERER, true );
+             reproductor = Manager.createRealizedPlayer(url);
         } catch (MalformedURLException ex) {
+            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoPlayerException ex) {
+            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CannotRealizeException ex) {
             Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jMenuItemAbrirActionPerformed
 
     private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
-        System.exit(0);
+        
     }//GEN-LAST:event_jMenu2ActionPerformed
+
+    private void jMenuItemRTPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRTPActionPerformed
+        
+        System.out.println("Opción rtp seleccionada");
+        try {
+            mediaLocator = new MediaLocator("rtp://10.100.1.167:22224/audio/1");
+            
+            if (mediaLocator != null) {
+                System.out.println("Esperando fuente...");
+                Manager.setHint( Manager.LIGHTWEIGHT_RENDERER, true );
+                reproductor = Manager.createRealizedPlayer(mediaLocator);
+//                panelControl();
+            }else{
+                System.out.println("No se puede crear la sesión");
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoPlayerException ex) {
+            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CannotRealizeException ex) {
+            Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemRTPActionPerformed
 
     /**
      * @param args the command line arguments
@@ -255,7 +268,15 @@ public class Reproductor extends javax.swing.JFrame implements ChangeListener{
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Reproductor().setVisible(true);
+                try {
+                    new Reproductor().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -347,9 +368,39 @@ public class Reproductor extends javax.swing.JFrame implements ChangeListener{
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemAbrir;
+    private javax.swing.JMenuItem jMenuItemRTP;
     private javax.swing.JPanel jPanelReproductor;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
+
+    private void crearPlayer() throws IOException, NoPlayerException {
+
+    }
+
+    private void configurarCodecMP3() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+               /* Esta es la direccion del codec que decodifica los mp3 */
+            String jffmpegAudioDecoder = "net.sourceforge.jffmpeg.AudioDecoder";
+            /* Cargamos el codec y lo guardamos en un objeto de tipo Codec */
+            Codec codecAudio = (Codec) Class.forName(jffmpegAudioDecoder).newInstance();
+            /* Agregamos los codec al PlugInManager */
+            PlugInManager.addPlugIn(jffmpegAudioDecoder,
+                    codecAudio.getSupportedInputFormats(),
+                    new Format[]{new AudioFormat("LINEAR")},
+                    PlugInManager.CODEC);
+    }
+
+    private void panelControl() {
+        
+            Component control = reproductor.getControlPanelComponent();
+
+            
+            control.setSize(jPanelReproductor.getPreferredSize());
+             jPanelReproductor.add(control, BorderLayout.CENTER);
+
+            reproductor.start();
+    }
+
+  
 }

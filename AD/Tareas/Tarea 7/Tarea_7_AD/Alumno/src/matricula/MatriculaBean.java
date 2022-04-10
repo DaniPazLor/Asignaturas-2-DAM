@@ -295,6 +295,40 @@ public class MatriculaBean {
         }
     }
 
+    
+    /*********************************************************************
+     * Código para añadir un nuevo alumno a la base de datos.
+     * cada vez que se modifca el estado de la BD se genera un evento para
+     * que se recargue el componente.
+     */
+
+    private BDModificadaListener receptor;
+
+    public class BDModificadaEvent extends java.util.EventObject
+    {
+        // constructor
+        public BDModificadaEvent(Object source)
+        {
+            super(source);
+        }
+    }
+    
+
+    //Define la interfaz para el nuevo tipo de evento
+    public interface BDModificadaListener extends EventListener
+    {
+        public void capturarBDModificada(BDModificadaEvent ev);
+    }
+
+    public void addBDModificadaListener(BDModificadaListener receptor)
+    {
+        this.receptor = receptor;
+    }
+    public void removeBDModificadaListener(BDModificadaListener receptor)
+    {
+        this.receptor=null;
+    }
+    
     private void addMatricula() {
 
         try {
@@ -308,6 +342,11 @@ public class MatriculaBean {
             ps.setString(4, Curso);
             ps.setDouble(5, Nota);
             
+            
+            ps.executeUpdate ();
+            recargarFilas();
+            receptor.capturarBDModificada( new BDModificadaEvent(this));
+            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MatriculaBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -316,6 +355,7 @@ public class MatriculaBean {
 
     }
 
+    
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertySupport.addPropertyChangeListener(listener);
     }

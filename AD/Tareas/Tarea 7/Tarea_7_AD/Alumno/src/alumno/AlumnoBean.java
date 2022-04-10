@@ -191,8 +191,8 @@ public class AlumnoBean implements Serializable {
     private void recargarFilas() throws ClassNotFoundException
     {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "dani", "5678");
+             Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery ("select * from alumnos");
             while (rs.next())
@@ -273,9 +273,71 @@ public class AlumnoBean implements Serializable {
     }
 
 
+    /*********************************************************************
+     * Código para añadir un nuevo alumno a la base de datos.
+     * cada vez que se modifca el estado de la BD se genera un evento para
+     * que se recargue el componente.
+     */
+
+    private BDModificadaListener receptor;
+
+    public class BDModificadaEvent extends java.util.EventObject
+    {
+        // constructor
+        public BDModificadaEvent(Object source)
+        {
+            super(source);
+        }
+    }
+    
+
+    //Define la interfaz para el nuevo tipo de evento
+    public interface BDModificadaListener extends EventListener
+    {
+        public void capturarBDModificada(BDModificadaEvent ev);
+    }
+
+    public void addBDModificadaListener(BDModificadaListener receptor)
+    {
+        this.receptor = receptor;
+    }
+    public void removeBDModificadaListener(BDModificadaListener receptor)
+    {
+        this.receptor=null;
+    }
 
 
+    /*******************************************************
+     * Método que añade un alumno a la base de datos
+     * añade un registro a la base de datos formado a partir
+     * de los valores de las propiedades del componente.
+     *
+     * Se presupone que se han usado los métodos set para configurar
+     * adecuadamente las propiedades con los datos del nuevo registro.
+     */
+    public void addAlumno() throws ClassNotFoundException
+    {
+        try {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
+            PreparedStatement s = con.prepareStatement("insert into alumnos values (?,?,?,?,?)");
 
+            s.setString(1, DNI);
+            s.setString(2, Nombre);
+            s.setString(3, Apellidos);
+            s.setString(4, Direccion);
+            s.setDate(5, FechaNac);
+
+            s.executeUpdate ();
+            recargarFilas();
+            receptor.capturarBDModificada( new BDModificadaEvent(this));
+        }
+        catch(SQLException ex)
+        {
+            Logger.getLogger(AlumnoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 
     /*******************************************************
      *

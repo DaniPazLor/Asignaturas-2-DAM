@@ -1,19 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package pruebaMatriculaBean;
 
-package pruebaalumnobean;
-import Alumno.AlumnoBean;
-import Alumno.AlumnoBean.BDModificadaEvent;
-import Alumno.AlumnoBean.BDModificadaListener;
 import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author usuario
+ * @author DANILOR
  */
 public class AccedeBD implements BDModificadaListener{
 
