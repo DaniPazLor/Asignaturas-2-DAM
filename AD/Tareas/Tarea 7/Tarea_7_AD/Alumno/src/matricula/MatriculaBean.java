@@ -94,7 +94,7 @@ public class MatriculaBean {
      **************************************************
      * Clase auxiliar que usaremos para crear un vector privado de matriculas.
      */
-    private class Matricula {
+    public class Matricula {
 
 
         public String DNI;
@@ -106,10 +106,10 @@ public class MatriculaBean {
         public Matricula() {
         }
 
-        public Matricula(String DNI, String NombreMódulo, String Curso, double Nota) throws Exception {
+        public Matricula(String DNI, String NombreModulo, String Curso, double Nota) {
             
             this.DNI = DNI;
-            this.NombreModulo = NombreMódulo;
+            this.NombreModulo = NombreModulo;
 //            if ((Curso.length() == 5)
 //                    && (Curso.charAt(0) <= 57 && Curso.charAt(0) >= 48)
 //                    && (Curso.charAt(1) <= 57 && Curso.charAt(1) >= 48)
@@ -177,21 +177,60 @@ public class MatriculaBean {
      * constantemente
      */
     public Vector Matriculas = new Vector();
+    
+    
+      
+    /*********************************************************************
+     * Código para añadir un nuevo alumno a la base de datos.
+     * cada vez que se modifca el estado de la BD se genera un evento para
+     * que se recargue el componente.
+     */
+
+    private CambioModoListener receptor;
+
+    public class CambioModoEvent extends java.util.EventObject
+    {
+        public boolean modo;
+        // constructor
+        public CambioModoEvent(Object source, boolean cambioModo)
+        {
+            super(source);
+            modo = cambioModo;
+        }
+    }
+    
+
+    //Define la interfaz para el nuevo tipo de evento
+    public interface CambioModoListener extends EventListener
+    {
+        public void capturarCambioModo(CambioModoEvent ev);
+    }
+
+    public void addBDModificadaListener(CambioModoListener receptor)
+    {
+        this.receptor = receptor;
+    }
+    public void removeBDModificadaListener(CambioModoListener receptor)
+    {
+        this.receptor=null;
+    }
 
        /*******************************************************
      * Actualiza el contenido de la tabla en el vector de alumnos
      * Las propiedades contienen el valor del primer elementos de la tabla
      */
-    private void recargarFilas() throws ClassNotFoundException
+    public void recargarFilas() throws ClassNotFoundException
     {
+             Matriculas.removeAllElements();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery ("select * from matriculas");
+         
             while (rs.next())
             {
-                MatriculaBean.Matricula m = new MatriculaBean.Matricula(
+                Matricula m = new Matricula(
                                       rs.getString("DNI"),
                                       rs.getString("NombreModulo"),
                                       rs.getString("Curso"),
@@ -199,16 +238,19 @@ public class MatriculaBean {
 
                 Matriculas.add(m);
             }
-            MatriculaBean.Matricula m = new MatriculaBean.Matricula();
-            m = (MatriculaBean.Matricula) Matriculas.elementAt(1);
+          
+            Matricula m = new Matricula();
+            m = (Matricula) Matriculas.elementAt(1);
             
             this.DNI = m.DNI;
             this.NombreModulo = m.NombreModulo;
             this.Curso = m.Curso;
             this.Nota = m.Nota;
             
-//            modo = true;
-//            receptor.capturarCambioModo(new CambioModoEvent(this, modo));
+            modo = true;
+            if (receptor!=null){
+                receptor.capturarCambioModo(new CambioModoEvent(this, modo));
+            }
             
             rs.close();
             con.close();
@@ -219,9 +261,7 @@ public class MatriculaBean {
             this.Curso = "";
             this.Nota = 0;
             Logger.getLogger(AlumnoBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            System.out.println("No existe la clase Matricula");
-        }
+        } 
     }
         
     
@@ -246,7 +286,7 @@ public class MatriculaBean {
             this.DNI = "";
             this.NombreModulo = "";
             this.Curso = "";
-            this.Nota = 0;
+            this.Nota = 0.0;
         }
     }
     /**
@@ -255,6 +295,8 @@ public class MatriculaBean {
      * propiedades contienen el valor del primer elementos de la tabla
      */
     public void recargarDNI(String numDNI) throws ClassNotFoundException, SQLException, Exception {
+        
+        Matriculas.removeAllElements();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
@@ -287,46 +329,12 @@ public class MatriculaBean {
             this.DNI = "";
             this.NombreModulo = "";
             this.Curso = "";
-            //this.Nota = "";
+            this.Nota = 0.0;
             Logger.getLogger(AlumnoBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    
-    /*********************************************************************
-     * Código para añadir un nuevo alumno a la base de datos.
-     * cada vez que se modifca el estado de la BD se genera un evento para
-     * que se recargue el componente.
-     */
-
-    private CambioModoListener receptor;
-
-    public class CambioModoEvent extends java.util.EventObject
-    {
-        public boolean modo;
-        // constructor
-        public CambioModoEvent(Object source, boolean modo)
-        {
-            super(source);
-            this.modo = modo;
-        }
-    }
-    
-
-    //Define la interfaz para el nuevo tipo de evento
-    public interface CambioModoListener extends EventListener
-    {
-        public void capturarCambioModo(CambioModoEvent ev);
-    }
-
-    public void addBDModificadaListener(CambioModoListener receptor)
-    {
-        this.receptor = receptor;
-    }
-    public void removeBDModificadaListener(CambioModoListener receptor)
-    {
-        this.receptor=null;
-    }
+  
     
     public void addMatricula() {
 

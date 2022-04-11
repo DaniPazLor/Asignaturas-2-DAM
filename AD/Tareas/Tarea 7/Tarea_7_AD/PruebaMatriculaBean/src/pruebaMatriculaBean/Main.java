@@ -19,9 +19,11 @@ public class Main {
 
         AccedeBD gestion = new AccedeBD();
 
-        gestion.listado();
+         gestion.listado();
 //        gestion.anade();
         gestion.listarPorDNI("96385274f");
+        
+       
     }
     
 }

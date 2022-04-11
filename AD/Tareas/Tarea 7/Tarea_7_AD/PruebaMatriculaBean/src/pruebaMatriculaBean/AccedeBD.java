@@ -9,6 +9,7 @@ package pruebaMatriculaBean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import matricula.MatriculaBean;
+import matricula.MatriculaBean.CambioModoEvent;
 import matricula.MatriculaBean.CambioModoListener;
 
 /**
@@ -28,11 +29,13 @@ public class AccedeBD implements CambioModoListener {
         }
     }
 
-    public void listado() {
-        System.out.println("Listado completo de alumnos matriculados");
-        for (int i = 0; i < 15; i++) {
+    public void listado() throws ClassNotFoundException {
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("        LISTADO COMPLETO DE ALUMNOS MATRICULADOS");
+        matricula.recargarFilas();
+        for (int i = 0; i < matricula.Matriculas.size(); i++) {
             matricula.seleccionarFila(i);
-            System.out.println("Matrícula " + i + "\n\tDNI:" + matricula.getDNI());
+            System.out.println("Matrícula " + (i+1) + "\n\tDNI:" + matricula.getDNI());
             System.out.println("\tNombre Módulo: " + matricula.getNombreModulo());
             System.out.println("\tCurso: " + matricula.getCurso());
             System.out.println("\tNota: " + matricula.getNota());
@@ -40,9 +43,12 @@ public class AccedeBD implements CambioModoListener {
     }
 
     public void listarPorDNI(String numDNI){
+
         try {
+            System.out.println("-------------------------------------------------------------");
+            System.out.println("            LISTADO DE MÓDULOS MATRICULADOS POR DNI");
             matricula.recargarDNI(numDNI);
-            System.out.println("Listado de módulos matriculados por Dni");
+           
             for (int i = 0; i < matricula.Matriculas.size(); i++) {
                 matricula.seleccionarFila(i);
                 System.out.println("\tDNI:" + matricula.getDNI());
@@ -65,12 +71,15 @@ public class AccedeBD implements CambioModoListener {
     }
 
     @Override
-    public void capturarCambioModo(MatriculaBean.CambioModoEvent evento) {
-        if (evento.modo) {
-            System.out.println("Se ha cargado toda la tabla");
+    public void capturarCambioModo(CambioModoEvent ev) {
+         if (ev.modo) {
+            System.out.println("-------------------------------------------------------------");
+            System.out.println("Modo true: se han cargado las matrículas de todos los alumnos");
         } else {
-            System.out.println("Se ha cargado la matricula de un alumno");
+            System.out.println("-----------------------------------------------------------");
+            System.out.println("Modo false: se han cargado las matriculas de un solo alumno");
         }
-
     }
+
+
 }
