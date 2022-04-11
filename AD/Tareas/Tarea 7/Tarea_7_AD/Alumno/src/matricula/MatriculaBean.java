@@ -27,13 +27,15 @@ public class MatriculaBean {
     private String sampleProperty;
 
     private PropertyChangeSupport propertySupport;
+    
+    public boolean modo;
 
     public MatriculaBean() throws Exception {
         propertySupport = new PropertyChangeSupport(this);
         try {
             recargarFilas();
         } catch (ClassNotFoundException ex) {
-            this.ID = 0;
+
             this.DNI = "";
             this.NombreModulo = "";
             this.Curso = "";
@@ -44,19 +46,11 @@ public class MatriculaBean {
 
     }
 
-    protected int ID;
+
     protected String DNI;
     protected String NombreModulo;
     protected String Curso;
     protected double Nota;
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setId(int id) {
-        this.ID = ID;
-    }
 
     public String getDNI() {
         return DNI;
@@ -66,12 +60,12 @@ public class MatriculaBean {
         this.DNI = DNI;
     }
 
-    public String getNombreMódulo() {
+    public String getNombreModulo() {
         return NombreModulo;
     }
 
-    public void setNombreMódulo(String NombreMódulo) {
-        this.NombreModulo = NombreMódulo;
+    public void setNombreModulo(String NombreModulo) {
+        this.NombreModulo = NombreModulo;
     }
 
     public String getCurso() {
@@ -102,17 +96,18 @@ public class MatriculaBean {
      */
     private class Matricula {
 
-        int ID;
-        String DNI;
-        String NombreModulo;
-        String Curso;
-        double Nota;
+
+        public String DNI;
+        public String NombreModulo;
+        public String Curso;
+        public double Nota;
+        
 
         public Matricula() {
         }
 
-        public Matricula(int ID, String DNI, String NombreMódulo, String Curso, double Nota) throws Exception {
-            this.ID = ID;
+        public Matricula(String DNI, String NombreMódulo, String Curso, double Nota) throws Exception {
+            
             this.DNI = DNI;
             this.NombreModulo = NombreMódulo;
 //            if ((Curso.length() == 5)
@@ -127,27 +122,20 @@ public class MatriculaBean {
 //                        + "guión, por ejemplo 11-12.");
 //            }
             // compila una cadena en un objeto Pattern
-            Pattern p = Pattern.compile("[1-9]{2}-[1-9]{2}");
-
-// Usa el objeto Pattern para crear un objeto Matcher
-            Matcher m = p.matcher(Curso);
-////boolean b = m.matches(); // devuelve verdadero
-
-            if (m.matches()) {
+//            Pattern p = Pattern.compile("[1-9]{2}-[1-9]{2}");
+//
+//// Usa el objeto Pattern para crear un objeto Matcher
+//            Matcher m = p.matcher(Curso);
+//////boolean b = m.matches(); // devuelve verdadero
+//
+//            if (m.matches()) {
                 this.Curso = Curso;
-            } else {
-                throw new Exception("Curso debe tener el siguiente patrón \"11-12\"");
-            }
+//            } else {
+//                throw new Exception("Curso debe tener el siguiente patrón \"11-12\"");
+//            }
             this.Nota = Nota;
         }
 
-        public int getID() {
-            return ID;
-        }
-
-        public void setID(int ID) {
-            this.ID = ID;
-        }
 
         public String getDNI() {
             return DNI;
@@ -157,11 +145,11 @@ public class MatriculaBean {
             this.DNI = DNI;
         }
 
-        public String getNombreMódulo() {
+        public String getNombreModulo() {
             return NombreModulo;
         }
 
-        public void setNombreMódulo(String NombreMódulo) {
+        public void setNombreModulo(String NombreMódulo) {
             this.NombreModulo = NombreMódulo;
         }
 
@@ -188,7 +176,7 @@ public class MatriculaBean {
      * forma que tengamos acceso a los datos sin necesidad de estar conectados
      * constantemente
      */
-    private Vector Matriculas = new Vector();
+    public Vector Matriculas = new Vector();
 
        /*******************************************************
      * Actualiza el contenido de la tabla en el vector de alumnos
@@ -198,12 +186,12 @@ public class MatriculaBean {
     {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "dani", "5678");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
             Statement s = con.createStatement();
-            ResultSet rs = s.executeQuery ("select * from alumnos");
+            ResultSet rs = s.executeQuery ("select * from matriculas");
             while (rs.next())
             {
-                MatriculaBean.Matricula m = new MatriculaBean.Matricula(rs.getInt("ID"),
+                MatriculaBean.Matricula m = new MatriculaBean.Matricula(
                                       rs.getString("DNI"),
                                       rs.getString("NombreModulo"),
                                       rs.getString("Curso"),
@@ -213,24 +201,29 @@ public class MatriculaBean {
             }
             MatriculaBean.Matricula m = new MatriculaBean.Matricula();
             m = (MatriculaBean.Matricula) Matriculas.elementAt(1);
-             this.ID = m.ID;
+            
             this.DNI = m.DNI;
             this.NombreModulo = m.NombreModulo;
             this.Curso = m.Curso;
             this.Nota = m.Nota;
+            
+//            modo = true;
+//            receptor.capturarCambioModo(new CambioModoEvent(this, modo));
+            
             rs.close();
             con.close();
         } catch (SQLException ex) {
-         this.ID = 0;
+        
             this.DNI = "";
             this.NombreModulo = "";
             this.Curso = "";
             this.Nota = 0;
             Logger.getLogger(AlumnoBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(MatriculaBean.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("No existe la clase Matricula");
         }
     }
+        
     
     
     /********************************************************
@@ -243,13 +236,13 @@ public class MatriculaBean {
         {
             Matricula m = new Matricula();
             m = (Matricula) Matriculas.elementAt(i);
-            this.ID = m.ID;
+            
             this.DNI = m.DNI;
             this.NombreModulo = m.NombreModulo;
             this.Curso = m.Curso;
             this.Nota = m.Nota;
         }else{            
-            this.ID = 0;
+            
             this.DNI = "";
             this.NombreModulo = "";
             this.Curso = "";
@@ -261,15 +254,15 @@ public class MatriculaBean {
      * Actualiza el contenido de la tabla en el vector de matriculas Las
      * propiedades contienen el valor del primer elementos de la tabla
      */
-    private void recargarDNI(String numDNI) throws ClassNotFoundException, SQLException, Exception {
+    public void recargarDNI(String numDNI) throws ClassNotFoundException, SQLException, Exception {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "dani", "5678");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
             PreparedStatement s = con.prepareStatement("select * from matriculas where DNI = ?");
             s.setString(1, numDNI);
             ResultSet rs = s.executeQuery();
             while (rs.next()) {
-                Matricula m = new Matricula(rs.getInt("ID"),
+                Matricula m = new Matricula(
                         rs.getString("DNI"),
                         rs.getString("NombreModulo"),
                         rs.getString("Curso"),
@@ -279,11 +272,15 @@ public class MatriculaBean {
             }
             Matricula m = new Matricula();
             m = (Matricula) Matriculas.elementAt(1);
-            this.ID = m.ID;
+            
             this.DNI = m.DNI;
             this.NombreModulo = m.NombreModulo;
             this.Curso = m.Curso;
             this.Nota = m.Nota;
+            
+            modo = false;
+            receptor.capturarCambioModo(new CambioModoEvent(this, modo));
+            
             rs.close();
             con.close();
         } catch (SQLException ex) {
@@ -302,50 +299,52 @@ public class MatriculaBean {
      * que se recargue el componente.
      */
 
-    private BDModificadaListener receptor;
+    private CambioModoListener receptor;
 
-    public class BDModificadaEvent extends java.util.EventObject
+    public class CambioModoEvent extends java.util.EventObject
     {
+        public boolean modo;
         // constructor
-        public BDModificadaEvent(Object source)
+        public CambioModoEvent(Object source, boolean modo)
         {
             super(source);
+            this.modo = modo;
         }
     }
     
 
     //Define la interfaz para el nuevo tipo de evento
-    public interface BDModificadaListener extends EventListener
+    public interface CambioModoListener extends EventListener
     {
-        public void capturarBDModificada(BDModificadaEvent ev);
+        public void capturarCambioModo(CambioModoEvent ev);
     }
 
-    public void addBDModificadaListener(BDModificadaListener receptor)
+    public void addBDModificadaListener(CambioModoListener receptor)
     {
         this.receptor = receptor;
     }
-    public void removeBDModificadaListener(BDModificadaListener receptor)
+    public void removeBDModificadaListener(CambioModoListener receptor)
     {
         this.receptor=null;
     }
     
-    private void addMatricula() {
+    public void addMatricula() {
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "dani", "5678");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
             String consulta = "INSERT INTO matriculas VALUES = (NULL,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(consulta);
-            ps.setInt(1, ID);
-            ps.setString(2, DNI);
-            ps.setString(3, NombreModulo);
-            ps.setString(4, Curso);
-            ps.setDouble(5, Nota);
+            ps.setString(1, DNI);
+            ps.setString(2, NombreModulo);
+            ps.setString(3, Curso);
+            ps.setDouble(4, Nota);
             
             
             ps.executeUpdate ();
             recargarFilas();
-            receptor.capturarBDModificada( new BDModificadaEvent(this));
+
+
             
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MatriculaBean.class.getName()).log(Level.SEVERE, null, ex);

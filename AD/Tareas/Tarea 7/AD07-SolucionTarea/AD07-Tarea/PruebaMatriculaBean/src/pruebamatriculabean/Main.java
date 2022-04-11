@@ -22,7 +22,7 @@ public class Main {
         AccedeBD gestion = new AccedeBD();
 
         gestion.listado();
-        //gestion.anade();
+        gestion.anade();
         try {
             gestion.listadoDNI("12345678A");
         } catch (ClassNotFoundException ex) {

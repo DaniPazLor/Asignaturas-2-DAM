@@ -18,12 +18,7 @@ import java.util.logging.Logger;
  * @author usuario
  */
 public class MatriculaBean implements Serializable {
-    //Datos para la conexión con mi base de datos de MySql
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/aerolinea";
-    static final String USER = "Dani";
-    static final String PASS = "5678";
-    private Connection Conexion;
+
     /*****************************************************
      * Propiedades del Bean.
      * Crearemos una propiedad por cada campo de la tabla de
@@ -307,7 +302,7 @@ public class MatriculaBean implements Serializable {
     public class ModoModificadoEvent extends java.util.EventObject
     {
         // constructor
-        public boolean modo;
+//        public boolean modo;
         public ModoModificadoEvent(Object source, boolean nModo)
         {
             super(source);
