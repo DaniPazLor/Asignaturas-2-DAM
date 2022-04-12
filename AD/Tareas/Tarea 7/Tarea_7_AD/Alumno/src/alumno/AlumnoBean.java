@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Alumno;
 
 import java.beans.*;
@@ -19,18 +18,16 @@ import java.util.logging.Logger;
  * @author usuario
  */
 public class AlumnoBean implements Serializable {
+
     private PropertyChangeSupport propertySupport;
 
-    /*****************************************************
-     * Propiedades del Bean.
-     * Crearemos una propiedad por cada campo de la tabla de
-     * la base de datos del siguiente modo:
+    /**
+     * ***************************************************
+     * Propiedades del Bean. Crearemos una propiedad por cada campo de la tabla
+     * de la base de datos del siguiente modo:
      *
-     * DNI: String
-     * Nombre: String
-     * Apellidos: String
-     * Direccion: String
-     * FechaNac: Date
+     * DNI: String Nombre: String Apellidos: String Direccion: String FechaNac:
+     * Date
      */
     public AlumnoBean() {
         propertySupport = new PropertyChangeSupport(this);
@@ -144,64 +141,61 @@ public class AlumnoBean implements Serializable {
         this.FechaNac = FechaNac;
     }
 
-    /*******************************************************
-     * Definimos los métodos y atributos privados del
-     * componente que usaremos para darle funcionalidad.
+    /**
+     * *****************************************************
+     * Definimos los métodos y atributos privados del componente que usaremos
+     * para darle funcionalidad.
      *
      */
-
-
-    /*****************************************************
-     * Clase auxiliar que usaremos para crear un vector privado
-     * de alumnos.
+    /**
+     * ***************************************************
+     * Clase auxiliar que usaremos para crear un vector privado de alumnos.
      */
-    private class Alumno
-    {
+    private class Alumno {
+
         String DNI;
         String Nombre;
         String Apellidos;
         String Direccion;
         Date FechaNac;
 
-        public Alumno()
-        {}
+        public Alumno() {
+        }
 
-        public Alumno(String nDNI, String nNombre, String nApellidos, String nDireccion, Date nFechaNac)
-        {
-          this.DNI = nDNI;
-          this.Nombre = nNombre;
-          this.Apellidos = nApellidos;
-          this.Direccion = nDireccion;
-          this.FechaNac = nFechaNac;
+        public Alumno(String nDNI, String nNombre, String nApellidos, String nDireccion, Date nFechaNac) {
+            this.DNI = nDNI;
+            this.Nombre = nNombre;
+            this.Apellidos = nApellidos;
+            this.Direccion = nDireccion;
+            this.FechaNac = nFechaNac;
         }
     }
 
-
-    /******************************************************
-     * Usaremos un vector auxiliar para cargar la información de la
-     * tabla de forma que tengamos acceso a los datos sin necesidad
-     * de estar conectados constantemente
+    /**
+     * ****************************************************
+     * Usaremos un vector auxiliar para cargar la información de la tabla de
+     * forma que tengamos acceso a los datos sin necesidad de estar conectados
+     * constantemente
      */
-    private Vector Alumnos=new Vector();
+    private Vector Alumnos = new Vector();
 
-    /*******************************************************
-     * Actualiza el contenido de la tabla en el vector de alumnos
-     * Las propiedades contienen el valor del primer elementos de la tabla
+    /**
+     * *****************************************************
+     * Actualiza el contenido de la tabla en el vector de alumnos Las
+     * propiedades contienen el valor del primer elementos de la tabla
      */
-    private void recargarFilas() throws ClassNotFoundException
-    {
+    private void recargarFilas() throws ClassNotFoundException {
         try {
-             Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
             Statement s = con.createStatement();
-            ResultSet rs = s.executeQuery ("select * from alumnos");
-            while (rs.next())
-            {
+            ResultSet rs = s.executeQuery("select * from alumnos");
+            while (rs.next()) {
                 Alumno a = new Alumno(rs.getString("DNI"),
-                                      rs.getString("Nombre"),
-                                      rs.getString("Apellidos"),
-                                      rs.getString("Direccion"),
-                                      rs.getDate("FechaNac"));
+                        rs.getString("Nombre"),
+                        rs.getString("Apellidos"),
+                        rs.getString("Direccion"),
+                        rs.getDate("FechaNac"));
 
                 Alumnos.add(a);
             }
@@ -222,14 +216,14 @@ public class AlumnoBean implements Serializable {
             Logger.getLogger(AlumnoBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    /********************************************************
+
+    /**
+     * ******************************************************
      *
      * @param i numero de la fila a cargar en las propiedades del componente
      */
-    public void seleccionarFila(int i)
-    {
-        if(i<=Alumnos.size())
-        {
+    public void seleccionarFila(int i) {
+        if (i <= Alumnos.size()) {
             Alumno a = new Alumno();
             a = (Alumno) Alumnos.elementAt(i);
             this.DNI = a.DNI;
@@ -237,7 +231,7 @@ public class AlumnoBean implements Serializable {
             this.Apellidos = a.Apellidos;
             this.Direccion = a.Direccion;
             this.FechaNac = a.FechaNac;
-        }else{
+        } else {
             this.DNI = "";
             this.Nombre = "";
             this.Apellidos = "";
@@ -245,24 +239,22 @@ public class AlumnoBean implements Serializable {
         }
     }
 
-    /********************************************************
+    /**
+     * ******************************************************
      *
      * @param nDNI DNI A buscar, se carga en las propiedades del componente
      */
-    public void seleccionarDNI(String nDNI)
-    {
+    public void seleccionarDNI(String nDNI) {
         Alumno a = new Alumno();
-        int i=0;
+        int i = 0;
 
         this.DNI = "";
         this.Nombre = "";
         this.Apellidos = "";
         this.Direccion = "";
-        while(this.DNI.equals("") && i<=Alumnos.size())
-        {
-            a = (Alumno)Alumnos.elementAt(i);
-            if ( a.DNI.equals(nDNI) )
-            {
+        while (this.DNI.equals("") && i <= Alumnos.size()) {
+            a = (Alumno) Alumnos.elementAt(i);
+            if (a.DNI.equals(nDNI)) {
                 this.DNI = a.DNI;
                 this.Nombre = a.Nombre;
                 this.Apellidos = a.Apellidos;
@@ -272,53 +264,48 @@ public class AlumnoBean implements Serializable {
         }
     }
 
-
-    /*********************************************************************
-     * Código para añadir un nuevo alumno a la base de datos.
-     * cada vez que se modifca el estado de la BD se genera un evento para
-     * que se recargue el componente.
+    /**
+     * *******************************************************************
+     * Código para añadir un nuevo alumno a la base de datos. cada vez que se
+     * modifca el estado de la BD se genera un evento para que se recargue el
+     * componente.
      */
-
     private BDModificadaListener receptor;
 
-    public class BDModificadaEvent extends java.util.EventObject
-    {
+    public class BDModificadaEvent extends java.util.EventObject {
+
         // constructor
-        public BDModificadaEvent(Object source)
-        {
+        public BDModificadaEvent(Object source) {
             super(source);
         }
     }
-    
 
     //Define la interfaz para el nuevo tipo de evento
-    public interface BDModificadaListener extends EventListener
-    {
+    public interface BDModificadaListener extends EventListener {
+
         public void capturarBDModificada(BDModificadaEvent ev);
     }
 
-    public void addBDModificadaListener(BDModificadaListener receptor)
-    {
+    public void addBDModificadaListener(BDModificadaListener receptor) {
         this.receptor = receptor;
     }
-    public void removeBDModificadaListener(BDModificadaListener receptor)
-    {
-        this.receptor=null;
+
+    public void removeBDModificadaListener(BDModificadaListener receptor) {
+        this.receptor = null;
     }
 
-
-    /*******************************************************
-     * Método que añade un alumno a la base de datos
-     * añade un registro a la base de datos formado a partir
-     * de los valores de las propiedades del componente.
+    /**
+     * *****************************************************
+     * Método que añade un alumno a la base de datos añade un registro a la base
+     * de datos formado a partir de los valores de las propiedades del
+     * componente.
      *
      * Se presupone que se han usado los métodos set para configurar
      * adecuadamente las propiedades con los datos del nuevo registro.
      */
-    public void addAlumno() throws ClassNotFoundException
-    {
+    public void addAlumno() throws ClassNotFoundException {
         try {
-              Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
             PreparedStatement s = con.prepareStatement("insert into alumnos values (?,?,?,?,?)");
 
@@ -328,22 +315,20 @@ public class AlumnoBean implements Serializable {
             s.setString(4, Direccion);
             s.setDate(5, FechaNac);
 
-            s.executeUpdate ();
+            s.executeUpdate();
             recargarFilas();
-            receptor.capturarBDModificada( new BDModificadaEvent(this));
-        }
-        catch(SQLException ex)
-        {
+            receptor.capturarBDModificada(new BDModificadaEvent(this));
+        } catch (SQLException ex) {
             Logger.getLogger(AlumnoBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    /*******************************************************
+    /**
+     * *****************************************************
      *
      * @param listener
      */
-
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertySupport.addPropertyChangeListener(listener);
     }

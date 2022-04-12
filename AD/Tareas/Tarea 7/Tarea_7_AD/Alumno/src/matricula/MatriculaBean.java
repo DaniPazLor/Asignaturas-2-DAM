@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package matricula;
 
 import Alumno.AlumnoBean;
@@ -13,45 +8,43 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
+ * Clase que conforma el componente JavaBean de MatriculaBEan que representa la
+ * tabla matriculas de la base de datos junto con los métodos de acceso y
+ * modificación
  *
- * @author DANILOR
+ * @author Daniel Paz Lorenzo
  */
 public class MatriculaBean {
 
     public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
 
-    private String sampleProperty;
-
+//    private String sampleProperty;
     private PropertyChangeSupport propertySupport;
-    
-    public boolean modo;
-
-    public MatriculaBean() throws Exception {
-        propertySupport = new PropertyChangeSupport(this);
-        try {
-            recargarFilas();
-        } catch (ClassNotFoundException ex) {
-
-            this.DNI = "";
-            this.NombreModulo = "";
-            this.Curso = "";
-            this.Nota = 0;
-            Logger.getLogger(AlumnoBean.class.getName()).log(Level.SEVERE, null, ex);
-
-        }
-
-    }
-
 
     protected String DNI;
     protected String NombreModulo;
     protected String Curso;
     protected double Nota;
+    public boolean modo;
 
+    /**
+     * Constructor de la clase
+     *
+     * @throws Exception
+     */
+    public MatriculaBean() {
+        propertySupport = new PropertyChangeSupport(this);
+        recargarFilas();
+
+    }
+
+    /**
+     * *************************************************
+     *
+     * Métodos getter & setter de la clase MatriculaBean
+     */
     public String getDNI() {
         return DNI;
     }
@@ -96,46 +89,22 @@ public class MatriculaBean {
      */
     public class Matricula {
 
-
+        public int ID;
         public String DNI;
         public String NombreModulo;
         public String Curso;
         public double Nota;
-        
 
         public Matricula() {
         }
 
-        public Matricula(String DNI, String NombreModulo, String Curso, double Nota) {
-            
+        public Matricula(String DNI, String NombreModulo, String Curso, double Nota) throws Exception {
+
             this.DNI = DNI;
             this.NombreModulo = NombreModulo;
-//            if ((Curso.length() == 5)
-//                    && (Curso.charAt(0) <= 57 && Curso.charAt(0) >= 48)
-//                    && (Curso.charAt(1) <= 57 && Curso.charAt(1) >= 48)
-//                    && (Curso.charAt(2) == 45)
-//                    && (Curso.charAt(3) <= 57 && Curso.charAt(3) >= 48)
-//                    && (Curso.charAt(4) <= 57 && Curso.charAt(4) >= 48)) {
-//                this.Curso = Curso;
-//            } else {
-//                throw new Exception("[ERROR] Curso debe contener los dos años que lo componen separados por un \n"
-//                        + "guión, por ejemplo 11-12.");
-//            }
-            // compila una cadena en un objeto Pattern
-//            Pattern p = Pattern.compile("[1-9]{2}-[1-9]{2}");
-//
-//// Usa el objeto Pattern para crear un objeto Matcher
-//            Matcher m = p.matcher(Curso);
-//////boolean b = m.matches(); // devuelve verdadero
-//
-//            if (m.matches()) {
-                this.Curso = Curso;
-//            } else {
-//                throw new Exception("Curso debe tener el siguiente patrón \"11-12\"");
-//            }
+            this.Curso = Curso;
             this.Nota = Nota;
         }
-
 
         public String getDNI() {
             return DNI;
@@ -149,8 +118,8 @@ public class MatriculaBean {
             return NombreModulo;
         }
 
-        public void setNombreModulo(String NombreMódulo) {
-            this.NombreModulo = NombreMódulo;
+        public void setNombreModulo(String NombreModulo) {
+            this.NombreModulo = NombreModulo;
         }
 
         public String getCurso() {
@@ -177,125 +146,125 @@ public class MatriculaBean {
      * constantemente
      */
     public Vector Matriculas = new Vector();
-    
-    
-      
-    /*********************************************************************
-     * Código para añadir un nuevo alumno a la base de datos.
-     * cada vez que se modifca el estado de la BD se genera un evento para
-     * que se recargue el componente.
-     */
 
+    /**
+     * *******************************************************************
+     * Creamos la clase que hereda de EvenObject para generar el evento de
+     * cambio de modo
+     */
     private CambioModoListener receptor;
 
-    public class CambioModoEvent extends java.util.EventObject
-    {
+    public class CambioModoEvent extends java.util.EventObject {
+
         public boolean modo;
+
         // constructor
-        public CambioModoEvent(Object source, boolean cambioModo)
-        {
+        public CambioModoEvent(Object source, boolean cambioModo) {
             super(source);
             modo = cambioModo;
         }
     }
-    
 
     //Define la interfaz para el nuevo tipo de evento
-    public interface CambioModoListener extends EventListener
-    {
+    public interface CambioModoListener extends EventListener {
+
         public void capturarCambioModo(CambioModoEvent ev);
     }
 
-    public void addBDModificadaListener(CambioModoListener receptor)
-    {
+    public void addBDModificadaListener(CambioModoListener receptor) {
         this.receptor = receptor;
     }
-    public void removeBDModificadaListener(CambioModoListener receptor)
-    {
-        this.receptor=null;
+
+    public void removeBDModificadaListener(CambioModoListener receptor) {
+        this.receptor = null;
     }
 
-       /*******************************************************
-     * Actualiza el contenido de la tabla en el vector de alumnos
+    /**
+     * Método que actualiza el contenido de la tabla en el vector de Matriculas
      * Las propiedades contienen el valor del primer elementos de la tabla
      */
-    public void recargarFilas() throws ClassNotFoundException
-    {
-             Matriculas.removeAllElements();
+    public void recargarFilas() {
+        Matriculas.removeAllElements();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
             Statement s = con.createStatement();
-            ResultSet rs = s.executeQuery ("select * from matriculas");
-         
-            while (rs.next())
-            {
+            ResultSet rs = s.executeQuery("select * from matriculas");
+
+            while (rs.next()) {
                 Matricula m = new Matricula(
-                                      rs.getString("DNI"),
-                                      rs.getString("NombreModulo"),
-                                      rs.getString("Curso"),
-                                      rs.getDouble("Nota"));
+                        rs.getString("DNI"),
+                        rs.getString("NombreModulo"),
+                        rs.getString("Curso"),
+                        rs.getDouble("Nota"));
 
                 Matriculas.add(m);
             }
-          
+
             Matricula m = new Matricula();
             m = (Matricula) Matriculas.elementAt(1);
-            
+
             this.DNI = m.DNI;
             this.NombreModulo = m.NombreModulo;
             this.Curso = m.Curso;
             this.Nota = m.Nota;
-            
+
             modo = true;
-            if (receptor!=null){
+            if (receptor != null) {
                 receptor.capturarCambioModo(new CambioModoEvent(this, modo));
             }
-            
+
             rs.close();
             con.close();
         } catch (SQLException ex) {
-        
+            System.err.println("No existen datos en la base de datos");
             this.DNI = "";
             this.NombreModulo = "";
             this.Curso = "";
             this.Nota = 0;
-            Logger.getLogger(AlumnoBean.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+
+        } catch (ClassNotFoundException ex) {
+            System.err.println("No se ha podido conectar a la base de datos");
+            Logger.getLogger(MatriculaBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.err.println("Error en la clase matricula");
+            Logger.getLogger(MatriculaBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-        
-    
-    
-    /********************************************************
+
+    /**
+     * ******************************************************
+     * Método para cargar la fila del vector Matriculas correspondiente a i
      *
      * @param i numero de la fila a cargar en las propiedades del componente
      */
-    public void seleccionarFila(int i)
-    {
-        if(i<=Matriculas.size())
-        {
+    public void seleccionarFila(int i) {
+        if (i <= Matriculas.size()) {
             Matricula m = new Matricula();
             m = (Matricula) Matriculas.elementAt(i);
-            
+
             this.DNI = m.DNI;
             this.NombreModulo = m.NombreModulo;
             this.Curso = m.Curso;
             this.Nota = m.Nota;
-        }else{            
-            
+        } else {
+
             this.DNI = "";
             this.NombreModulo = "";
             this.Curso = "";
             this.Nota = 0.0;
         }
     }
+
     /**
      * *****************************************************
      * Actualiza el contenido de la tabla en el vector de matriculas Las
      * propiedades contienen el valor del primer elementos de la tabla
+     *
+     * @param numDNI número del dni solicitado
      */
-    public void recargarDNI(String numDNI) throws ClassNotFoundException, SQLException, Exception {
-        
+    public void recargarDNI(String numDNI) {
+
         Matriculas.removeAllElements();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -314,15 +283,15 @@ public class MatriculaBean {
             }
             Matricula m = new Matricula();
             m = (Matricula) Matriculas.elementAt(1);
-            
+
             this.DNI = m.DNI;
             this.NombreModulo = m.NombreModulo;
             this.Curso = m.Curso;
             this.Nota = m.Nota;
-            
+
             modo = false;
             receptor.capturarCambioModo(new CambioModoEvent(this, modo));
-            
+
             rs.close();
             con.close();
         } catch (SQLException ex) {
@@ -331,38 +300,44 @@ public class MatriculaBean {
             this.Curso = "";
             this.Nota = 0.0;
             Logger.getLogger(AlumnoBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            System.err.println("No se ha podido conectar a la base de datos");
+            Logger.getLogger(MatriculaBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.err.println("Error en la clase matricula");
+            Logger.getLogger(MatriculaBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-  
-    
+    /**
+     * Método para añadir una nueva matrícula en la base de datos
+     */
     public void addMatricula() {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
-            String consulta = "INSERT INTO matriculas VALUES = (NULL,?,?,?,?)";
+            String consulta = "INSERT INTO matriculas VALUES (null,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(consulta);
+
             ps.setString(1, DNI);
             ps.setString(2, NombreModulo);
             ps.setString(3, Curso);
             ps.setDouble(4, Nota);
-            
-            
-            ps.executeUpdate ();
-            recargarFilas();
 
+            ps.executeUpdate();
+//            recargarFilas();
 
-            
         } catch (ClassNotFoundException ex) {
+            System.err.println("No se ha podido conectar a la base de datos");
             Logger.getLogger(MatriculaBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
+            System.err.println("Error en la sentencia SQL");
             Logger.getLogger(MatriculaBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertySupport.addPropertyChangeListener(listener);
     }
