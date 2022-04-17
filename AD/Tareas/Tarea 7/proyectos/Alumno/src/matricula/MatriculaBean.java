@@ -317,7 +317,7 @@ public class MatriculaBean {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbddtarea7", "Dani", "5678");
-            String consulta = "INSERT INTO matriculas VALUES (null,?,?,?,?)";
+            String consulta = "INSERT INTO matriculas VALUES (?,?,?,?,null)";
             PreparedStatement ps = con.prepareStatement(consulta);
 
             ps.setString(1, DNI);
