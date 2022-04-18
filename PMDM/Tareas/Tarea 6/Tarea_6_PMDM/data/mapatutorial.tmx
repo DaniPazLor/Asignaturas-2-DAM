@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="50" height="38" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="1">
+ <tileset firstgid="1" source="VariadoTileset.tsx"/>
+ <layer id="4" name="Suelo" width="50" height="38">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACu3WyQ2DQAxA0WkHqCC1sEokGaBlVikJWxX5JXBIYhz58OSr5S8xlBfnriiVzweefzCl72g9rMeZp/QdrYf1OPOUvqP1sB5H5y1w7g6PCjWaQF+PFzvPWLBiwx4o7BHSAx4VajShwh7sPGPBig17qLBHRA94VKjRRAp7sPOMBSs27JG+HhLzW/f59ZS+o/WwHkdnzNudIEWGHIXC97xl5w49BoyYFP5fxbzdCVJkyFEofM9bdu7QY8CISeH/lcSU+r5YD+uhYUrf0XpYjzNP6Tt+ar4BDei8hLAdAAA=
+  </data>
+ </layer>
+ <layer id="2" name="Obstaculos" width="50" height="38">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACu3Yu04CQRiG4UkABTqFCmgQKAQazsLK4U7wakRLvQPRRqHhfEZbD/cAl+JrXBILF1EGyJr5kidRdpj5frYbIT5T9ghx5hGmiVHfGZ/NJc2hWYQ4RR4FFFGyyNl7EaO+ZS/zeeWcMaLzGBNM8YgnyXMY9Z3x2VzSHJqV94E8CiiiZJWz9yJGfcs+5vPJOWNE5zEmmOIRT5LnMOo747O5pDk0G+8DeRRQRMkmZ+9FZPZdlj2XEPuww+Ha/HmbyjndK7jApYnn2HPzPmCHw73rNn/POd0ruMClief4yEFIiMPQrlusnytmuP4Hc6ioqKiomCd+uxBHCCBoX3+/Y/YII4KohP1WzQ1nVXGLOwnn3rPHA2qob3EOv4P3gQCCjtW/Z3T/cMweYUQQXbJfhmcn+vMY88aRQBIppPXfIMua3Aq9blhTxS3uvln/2/uSe/Z4QA31Jef3eNbXnzfo3EQLbXTQ1ecYsGb4i9/XKJu6L8k4eR/Oz79j9IwjgSRSSOvds6zJOf9+zk99170v6dGtr/dr0LmJFtrooKvPMWDNUMIc27gvidEzjgSSSCEtofvXbOO+pEHnJlpoo4Ou5Dm2dV+ioqKioqJihjxrQrzgFW+aef9/B9vFV2ewHQAA
+  </data>
+ </layer>
+ <layer id="3" name="Decoracion" width="50" height="38" opacity="0.6">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACu2YQQ6CMBBFZwVucadwC9zpQaR4S9npQRQ8jL9RkmYKATRCGv9Lfib9k99OSVeIEPI7ylTklC49xXj65m3gPQK6R9+8ZYb7ZfPP8ymhzUsIIYQQQggh/8R+JXJYLT3F91xwh+vM9+D/kmXg/xJCxlMkIiYJv96h4wZryEAlVL/9tuaRyC7y/aFc7WS1r7O6P/XcYi1ys/vYNdTY/vrlt/WMvarI94dyxslqX2d1f+q5d+i4RR8yUAnVb7+teYzvEvv+UK52strXWd2feq59Xze7j11DzdZ/f2fsVcW+P5QzTlb7Otv17qec2/UuQ6xd7zLE+gRFS4RWsB0AAA==
+  </data>
+ </layer>
+ <layer id="5" name="Altura" width="50" height="38">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACu3ROQ6EMABD0UgMlCCGtYebsvTsHHd+j6YggkDhJ7l0nCjGiIjIG3mVMZ/K3Z7PVnDDXsOZrcN3dGz1N+x5Nf9RX3/uPz5bwQ17DWe2Dt/RsdU73BORozg05ksSkobn+xmdnBSktOhfZWB7JBOZLe6x0FnJRvYH3xFH/AdJSBqd72d0clKQ0qJ/lYHtkUxktrjHQmclG9kffIeIiIiIiIjIG/wAXUeYyLAdAAA=
+  </data>
+ </layer>
+</map>
