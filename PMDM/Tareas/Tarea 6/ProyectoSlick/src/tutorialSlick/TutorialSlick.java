@@ -7,7 +7,7 @@ package tutorialslick;
 import java.io.File;
 import org.lwjgl.LWJGLUtil;
 import org.newdawn.slick.*;
-import org.newdawn.slick.Input.*;
+import org.newdawn.slick.geom.*;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.tiled.*;
 
@@ -58,26 +58,19 @@ public class TutorialSlick extends BasicGame {
     // Contador de tiempo
     private long tiempo;
 
-//    //Declaración variables NPCS
-//    private Animation nojugadorArriba;
-//
-//    private Animation nojugadorDerecha;
-//
-//    private Animation nojugadorAbajo;
-//
-//    private Animation nojugadorIzquierda;
-//
-//    private Animation[] nojugador;
-//
-//    private float[] nojugadorX;
-//
-//    private float[] nojugadorY;
-//
-//    private float[] destinoX;
-//
-//    private float[] destinoY;
-//
-//    private static final int numeroNPCs = 4;
+    //Musica y efectos sonoros
+    private Music musica;
+    private Sound sonido;
+    private Sound sonido2;
+
+    //Rectángulos de colision robots y jugador
+//    private Rectangle [] rectRob;
+    private Rectangle rectRobot0;
+    private Rectangle rectRobot1;
+    private Rectangle rectRobot2;
+    private Rectangle rectRobot3;
+    private Rectangle rectJugador;
+
     public TutorialSlick(String name) {
         super(name);
     }
@@ -105,7 +98,12 @@ public class TutorialSlick extends BasicGame {
         mapa = new TiledMap("data/mapatutorial.tmx", "data");
         cuadros = new SpriteSheet("data/heroe.png", 24, 32);
         cuadrosRobot = new SpriteSheet("data/robot.png", 24, 32);
+        musica = new Music("data/Cancion_Ejemplo.xm");
+        sonido = new Sound("data/FlameMagic.ogg");
+        sonido2 = new Sound("data/BigBossDeath.ogg");
+        musica.loop();
 
+        //Carga animaciones de jugador
         jugadorArriba = new Animation(cuadros, 0, 0, 2, 0, true, 150, false);
         jugadorDerecha = new Animation(cuadros, 0, 1, 2, 1, true, 150, false);
         jugadorAbajo = new Animation(cuadros, 0, 2, 2, 2, true, 150, false);
@@ -124,6 +122,7 @@ public class TutorialSlick extends BasicGame {
         jugadorX = 325;
         jugadorY = 200;
         jugadorVivo = true;
+        rectJugador = new Rectangle(jugadorX, jugadorY, (jugador.getWidth() - 6), jugador.getHeight());
 
         // estado inicial de los robots       
         robot = new Animation[4];
@@ -148,9 +147,20 @@ public class TutorialSlick extends BasicGame {
         robotY[2] = 300;
         robotY[3] = 400;
 
+        //Rectángulos de colisiones
+        rectRobot0 = new Rectangle(robotX[0], robotY[0], (robot[0].getWidth() - 6), robot[0].getHeight() - 8);
+        rectRobot1 = new Rectangle(robotX[1], robotY[1], robot[1].getWidth() - 6, robot[1].getHeight() - 8);
+        rectRobot2 = new Rectangle(robotX[2], robotY[2], robot[2].getWidth() - 6, robot[2].getHeight() - 8);
+        rectRobot3 = new Rectangle(robotX[3], robotY[3], robot[3].getWidth() - 6, robot[3].getHeight() - 8);
+//        rectRob[0] = new Rectangle(robotX[0], robotY[0], robot[0].getWidth(), robot[0].getHeight());
+//        rectRob[1] = new Rectangle(robotX[1], robotY[1], robot[1].getWidth(), robot[1].getHeight());
+//        rectRob[2] = new Rectangle(robotX[2], robotY[2], robot[2].getWidth(), robot[2].getHeight());
+//        rectRob[3] = new Rectangle(robotX[3], robotY[3], robot[3].getWidth(), robot[3].getHeight());
+
         // indicamos que, de momento, los 4 robots están vivos
         for (int i = 0; i < 4; i++) {
             robotVivo[i] = true;
+            robot[i].setLooping(false);
         }
 
         // cargar tipo de letra de la carpeta data y todos los símboles
@@ -193,40 +203,6 @@ public class TutorialSlick extends BasicGame {
         tileWidth = mapa.getTileWidth();
         tileHeight = mapa.getTileHeight();
 
-//        //Animar NPCS
-//        cuadrosNPCS = new SpriteSheet("data/robot.png", 24, 32);
-//        nojugadorArriba = new Animation(cuadrosNPCS, 0, 0, 2, 0, true, 150, true);
-//
-//        nojugadorDerecha = new Animation(cuadrosNPCS, 0, 1, 2, 1, true, 150, true);
-//
-//        nojugadorAbajo = new Animation(cuadrosNPCS, 0, 2, 2, 2, true, 150, true);
-//
-//        nojugadorIzquierda
-//                = new Animation(cuadrosNPCS, 0, 3, 2, 3, true, 150, true);
-//
-//        nojugador = new Animation[numeroNPCs];
-//
-//        nojugadorX = new float[numeroNPCs];
-//
-//        nojugadorY = new float[numeroNPCs];
-//
-//        destinoX = new float[numeroNPCs];
-//
-//        destinoY = new float[numeroNPCs];
-//
-//        for (int i = 0; i < numeroNPCs; i++) {
-//
-//            nojugador[i] = nojugadorAbajo;
-//
-//            nojugadorX[i] = (float) (Math.random() * mapaWidth);
-//
-//            nojugadorY[i] = (float) (Math.random() * mapaHeight);
-//
-//            destinoX[i] = (float) (Math.random() * mapaWidth);
-//
-//            destinoY[i] = (float) (Math.random() * mapaHeight);
-//
-//        }
     }
 
     @Override
@@ -253,21 +229,25 @@ public class TutorialSlick extends BasicGame {
             jugadorY += delta * 0.1f;
             jugador = jugadorAbajo;
             jugador.update(delta);
+            rectJugador.setY(jugadorY);
         }
         if (entrada.isKeyDown(Input.KEY_UP)) {	// Tecla arriba
             jugadorY -= delta * 0.1f;
             jugador = jugadorArriba;
             jugador.update(delta);
+            rectJugador.setY(jugadorY);
         }
         if (entrada.isKeyDown(Input.KEY_RIGHT)) {	// Tecla derecha
             jugadorX += delta * 0.1f;
             jugador = jugadorDerecha;
             jugador.update(delta);
+            rectJugador.setX(jugadorX);
         }
         if (entrada.isKeyDown(Input.KEY_LEFT)) {	// Tecla izquierda
             jugadorX -= delta * 0.1f;
             jugador = jugadorIzquierda;
             jugador.update(delta);
+            rectJugador.setX(jugadorX);
         }
 
         //---------------------------------------------------------------
@@ -277,6 +257,7 @@ public class TutorialSlick extends BasicGame {
 
             robotX[0] += delta * 0.05f;
             robot[0] = robotDerecha;
+            rectRobot0.setX(robotX[0]);
             robot[0].update(delta);
         }
         //Movimiento del robot en eje x negativo
@@ -284,6 +265,7 @@ public class TutorialSlick extends BasicGame {
 
             robotX[0] -= delta * 0.05f;
             robot[0] = robotIzquierda;
+            rectRobot0.setX(robotX[0]);
             robot[0].update(delta);
         }
         //Movimiento del robot en eje y positivo
@@ -291,6 +273,7 @@ public class TutorialSlick extends BasicGame {
 
             robotY[0] += delta * 0.05f;
             robot[0] = robotAbajo;
+            rectRobot0.setY(robotY[0]);
             robot[0].update(delta);
         }
 
@@ -299,6 +282,7 @@ public class TutorialSlick extends BasicGame {
 
             robotY[0] -= delta * 0.05f;
             robot[0] = robotArriba;
+            rectRobot0.setY(robotY[0]);
             robot[0].update(delta);
         }
 
@@ -311,6 +295,7 @@ public class TutorialSlick extends BasicGame {
             robotX[1] += delta * 0.04f;
             robot[1] = robotDerecha;
             robot[1].update(delta);
+            rectRobot1.setX(robotX[1]);
         }
         //Movimiento del robot en eje y positivo
         if (jugadorY > robotY[1]) {
@@ -318,6 +303,7 @@ public class TutorialSlick extends BasicGame {
             robotY[1] += delta * 0.04f;
             robot[1] = robotAbajo;
             robot[1].update(delta);
+            rectRobot1.setY(robotY[1]);
         }
         //Movimiento del robot en eje x negativo
         if (jugadorX < robotX[1]) {
@@ -325,6 +311,7 @@ public class TutorialSlick extends BasicGame {
             robotX[1] -= delta * 0.04f;
             robot[1] = robotIzquierda;
             robot[1].update(delta);
+            rectRobot1.setX(robotX[1]);
         }
         //Movimiento del robot en eje y negativo
         if (jugadorY < robotY[1]) {
@@ -332,6 +319,7 @@ public class TutorialSlick extends BasicGame {
             robotY[1] -= delta * 0.04f;
             robot[1] = robotArriba;
             robot[1].update(delta);
+            rectRobot1.setY(robotY[1]);
         }
 
         //----------------------------------------------------------------
@@ -343,6 +331,7 @@ public class TutorialSlick extends BasicGame {
             robotX[2] += delta * 0.03f;
             robot[2] = robotDerecha;
             robot[2].update(delta);
+            rectRobot2.setX(robotX[2]);
         }
         //Movimiento del robot en eje y positivo
         if (jugadorY > robotY[2]) {
@@ -350,6 +339,7 @@ public class TutorialSlick extends BasicGame {
             robotY[2] += delta * 0.03f;
             robot[2] = robotAbajo;
             robot[2].update(delta);
+            rectRobot2.setY(robotY[2]);
         }
         //Movimiento del robot en eje x negativo
         if (jugadorX < robotX[2]) {
@@ -357,6 +347,7 @@ public class TutorialSlick extends BasicGame {
             robotX[2] -= delta * 0.03f;
             robot[2] = robotIzquierda;
             robot[2].update(delta);
+            rectRobot2.setX(robotX[2]);
         }
         //Movimiento del robot en eje y negativo
         if (jugadorY < robotY[2]) {
@@ -364,17 +355,20 @@ public class TutorialSlick extends BasicGame {
             robotY[2] -= delta * 0.03f;
             robot[2] = robotArriba;
             robot[2].update(delta);
+            rectRobot2.setY(robotY[2]);
         }
 
         //----------------------------------------------------------------
         //---------------------------------------------------------------
         //Movimientos robot[3]
         //Movimiento del robot en eje x positivo
+        if (robotVivo[3]) {
         if (jugadorX > robotX[3]) {
 
             robotX[3] += delta * 0.02f;
             robot[3] = robotDerecha;
             robot[3].update(delta);
+            rectRobot3.setX(robotX[3]);
         }
         //Movimiento del robot en eje y positivo
         if (jugadorY > robotY[3]) {
@@ -382,6 +376,7 @@ public class TutorialSlick extends BasicGame {
             robotY[3] += delta * 0.02f;
             robot[3] = robotAbajo;
             robot[3].update(delta);
+            rectRobot3.setY(robotY[3]);
         }
         //Movimiento del robot en eje x negativo
         if (jugadorX < robotX[3]) {
@@ -389,6 +384,7 @@ public class TutorialSlick extends BasicGame {
             robotX[3] -= delta * 0.02f;
             robot[3] = robotIzquierda;
             robot[3].update(delta);
+            rectRobot3.setX(robotX[3]);
         }
         //Movimiento del robot en eje y negativo
         if (jugadorY < robotY[3]) {
@@ -396,6 +392,10 @@ public class TutorialSlick extends BasicGame {
             robotY[3] -= delta * 0.02f;
             robot[3] = robotArriba;
             robot[3].update(delta);
+            rectRobot3.setY(robotY[3]);
+        }
+        }else{
+            rectRobot3.closed();
         }
 
         //----------------------------------------------------------------
@@ -415,8 +415,11 @@ public class TutorialSlick extends BasicGame {
 //                        robotX[i] = robotAnteriorX[i];
 //                        robotY[i] = robotAnteriorY[i];
 
-//                        robot[i].stop();
+                robot[i].stop();
                 if (robotVivo[i]) {
+                    if (sonido.playing() == false) {
+                        sonido.play();
+                    }
                     robotVivo[i] = false;
                     numeroRobotsVivos -= 1;
                 }
@@ -428,8 +431,10 @@ public class TutorialSlick extends BasicGame {
         //NO FUNCIONA
         //Evalúa si robot a tocado a jugador
         for (int i = 0; i < 4; i++) {
-            if (robotX[i] == jugadorX) {
-//                jugador.stop();
+            if (rectJugador.intersects(rectRobot0) || rectJugador.intersects(rectRobot1) || rectJugador.intersects(rectRobot2) || rectJugador.intersects(rectRobot3)) {
+                if (sonido.playing() == false) {
+                    sonido2.play();
+                }
                 jugadorVivo = false;
                 return;
             }
@@ -466,11 +471,16 @@ public class TutorialSlick extends BasicGame {
         mapa.render(0, 0, 0);
         mapa.render(0, 0, 1);
         jugador.draw(jugadorX, jugadorY);
+        g.drawRect(rectJugador.getX(), rectJugador.getY(), rectJugador.getWidth(), rectJugador.getHeight());
 
         // dibujar robots si están vivos
         for (int i = 0; i < 4; i++) {
             if (robotVivo[i]) {
                 robot[i].draw(robotX[i], robotY[i]);
+                g.drawRect(rectRobot0.getX(), rectRobot0.getY(), rectRobot0.getWidth(), rectRobot0.getHeight());
+                g.drawRect(rectRobot1.getX(), rectRobot1.getY(), rectRobot1.getWidth(), rectRobot1.getHeight());
+                g.drawRect(rectRobot2.getX(), rectRobot2.getY(), rectRobot2.getWidth(), rectRobot2.getHeight());
+                g.drawRect(rectRobot3.getX(), rectRobot3.getY(), rectRobot3.getWidth(), rectRobot3.getHeight());
             }
         }
 
@@ -497,11 +507,6 @@ public class TutorialSlick extends BasicGame {
         // dibujar tiempo transcurrido si no ha acabado el juego
         fuente.drawString(100, 10, "Tiempo: " + (System.currentTimeMillis() - tiempo) / 1000);
 
-////Renderizado NPCS
-//        for (int i = 0; i < numeroNPCs; i++) {
-//
-//            nojugador[i].draw(nojugadorX[i], nojugadorY[i]);
-//        }
     }
 
 }
