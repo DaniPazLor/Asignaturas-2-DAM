@@ -20,8 +20,13 @@ public class FormularioAplicacion extends javax.swing.JFrame {
     //Declaración de variables de clase
     private String usuario;
     private String password;
+    private String nomFicClavePublica;
+    private String nomFicClavePrivada;
+    
     private SecretKey clave;
     private File fichero;
+    private File claveCifrada;
+
 
     /**
      * Constructor de la clase FormularioAplicacion
@@ -30,7 +35,7 @@ public class FormularioAplicacion extends javax.swing.JFrame {
      * @param pwd insertado por el usuario
      * @throws NoSuchAlgorithmException
      */
-    public FormularioAplicacion(String usuario, String pwd) throws NoSuchAlgorithmException {
+    public FormularioAplicacion(String usuario, String pwd, String nomFicClavePublica, String nomFicClavePrivada) throws NoSuchAlgorithmException {
         initComponents();
         //Inicializar variables de clase
         etiquetaUsuario.setText(usuario);
@@ -38,8 +43,13 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         this.usuario = usuario;
         this.password = pwd;
         this.fichero = new File("fichero");
+        this.nomFicClavePublica = nomFicClavePublica;
+        this.nomFicClavePrivada = nomFicClavePrivada;
+        
+        cifrarClaveAsimetrica(nomFicClavePublica, nomFicClavePrivada);
         //Crear e inicializar clave
         this.clave = generarClaveSercreta(usuario, password);
+
     }
 
     /**
@@ -174,6 +184,52 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void cifrarClaveAsimetrica(String nomFicClavePublica, String nomFicClavePrivada){
+        try {
+            File clavePublicaCifrada = new File(nomFicClavePublica);
+            FileOutputStream fosPublica = new FileOutputStream(clavePublicaCifrada);
+            File clavePrivadaCifrada = new File(nomFicClavePrivada);
+            FileOutputStream fosPrivada = new FileOutputStream(clavePrivadaCifrada);
+            
+            //Generamos el par de claves RSA (publica y privada)
+            System.out.println("Generando par de claves RSA...");
+            KeyPairGenerator generadorRSA = KeyPairGenerator.getInstance("RSA");
+            generadorRSA.initialize(1024);
+            KeyPair claves = generadorRSA.genKeyPair();
+            System.out.println("Generada la clave asimétrica.");
+            PublicKey clavePublica = claves.getPublic();
+            PrivateKey clavePrivada = claves.getPrivate();
+            //Convertimos a flujo de bytes
+            byte[] bytesClavePublica = clavePublica.getEncoded();
+            byte[] bytesClavePrivada = clavePrivada.getEncoded();
+            //Guardamos en respectivos ficheros
+            fosPublica.write(bytesClavePublica);
+            fosPrivada.write(bytesClavePrivada);
+            System.out.println("Se han guardado las 2 claves correctamente");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void cifrarClaveSimetrica(){
+//         //crear e inicializar el cifrador RSA que se va a encargar de encriptar
+//            //la clave AES con la parte pública del par RSA
+//            Cipher cifradorRSA= Cipher.getInstance("RSA/ECB/PKCS1Padding");
+//            cifradorRSA.init(Cipher.ENCRYPT_MODE, claves.getPublic());
+//        
+//        //Una vez tenemos este cifrador cogemos los byte de la clave Blowfish y los encriptamos
+//        byte[] bytesClaveAES = clave.getEncoded();
+//        byte[] claveAESCifrada = cifradorRSA.doFinal(bytesClaveAES);
+
+
+       
+    }
+    
     /**
      * Método que resuelve el evento generado al pulsar el botón de mostrar el
      * fichero encriptado mostrandolo en el area de texto

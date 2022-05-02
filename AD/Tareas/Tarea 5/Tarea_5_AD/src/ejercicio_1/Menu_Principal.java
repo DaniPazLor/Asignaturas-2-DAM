@@ -41,8 +41,7 @@ public class Menu_Principal {
                
         switch (op) {
             case 1:
-                controlBBBDD.consultarJefes55(bdJefeHijo.baseDatos);
-        
+                controlBBBDD.consultarJefes55(bdJefeHijo.baseDatos);        
                 break;
             case 2:
                 controlBBBDD.actualizarEdadMiguel(bdJefeHijo.baseDatos);
