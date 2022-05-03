@@ -1,12 +1,16 @@
 package ejercicio;
 
-
-
 import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Clase que hereda de JFrame y muestra una vista de tipo formulario con botones
@@ -22,11 +26,17 @@ public class FormularioAplicacion extends javax.swing.JFrame {
     private String password;
     private String nomFicClavePublica;
     private String nomFicClavePrivada;
-    
+
     private SecretKey clave;
+    private SecretKey nuevaClaveDescifrada;
+    private SecretKey claveDescifrada;
+    private KeyPair claves;
+    private PublicKey clavePublica;
+    private PrivateKey clavePrivada;
     private File fichero;
     private File claveCifrada;
-
+    private File clavePublicaCifrada;
+    private File clavePrivadaCifrada;
 
     /**
      * Constructor de la clase FormularioAplicacion
@@ -45,10 +55,15 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         this.fichero = new File("fichero");
         this.nomFicClavePublica = nomFicClavePublica;
         this.nomFicClavePrivada = nomFicClavePrivada;
-        
-        cifrarClaveAsimetrica(nomFicClavePublica, nomFicClavePrivada);
-        //Crear e inicializar clave
-        this.clave = generarClaveSercreta(usuario, password);
+
+        //Crea y genera las claves asimétricas
+        generarClavesAsimetricas();
+        //Crear e inicializar clave simétrica
+        this.clave = generarClaveSecreta(usuario, password);
+        //Cifra la clave simetrica
+        cifrarClaveSimetrica(nomFicClavePublica);
+        //Descifra la clave simetrica
+        descifrarClaveSimetrica(nomFicClavePrivada);
 
     }
 
@@ -184,28 +199,30 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    private void cifrarClaveAsimetrica(String nomFicClavePublica, String nomFicClavePrivada){
+    private void generarClavesAsimetricas() {
         try {
-            File clavePublicaCifrada = new File(nomFicClavePublica);
+            clavePublicaCifrada = new File("clavePublica.cifrada");
             FileOutputStream fosPublica = new FileOutputStream(clavePublicaCifrada);
-            File clavePrivadaCifrada = new File(nomFicClavePrivada);
+            clavePrivadaCifrada = new File("clavePrivada.cifrada");
             FileOutputStream fosPrivada = new FileOutputStream(clavePrivadaCifrada);
-            
+
             //Generamos el par de claves RSA (publica y privada)
             System.out.println("Generando par de claves RSA...");
             KeyPairGenerator generadorRSA = KeyPairGenerator.getInstance("RSA");
             generadorRSA.initialize(1024);
-            KeyPair claves = generadorRSA.genKeyPair();
+            claves = generadorRSA.genKeyPair();
             System.out.println("Generada la clave asimétrica.");
-            PublicKey clavePublica = claves.getPublic();
-            PrivateKey clavePrivada = claves.getPrivate();
+            clavePublica = claves.getPublic();
+            clavePrivada = claves.getPrivate();
             //Convertimos a flujo de bytes
             byte[] bytesClavePublica = clavePublica.getEncoded();
             byte[] bytesClavePrivada = clavePrivada.getEncoded();
             //Guardamos en respectivos ficheros
             fosPublica.write(bytesClavePublica);
             fosPrivada.write(bytesClavePrivada);
+            //Muestra las claves generadas
+            mostrarBytes(bytesClavePublica);
+            mostrarBytes(bytesClavePrivada);
             System.out.println("Se han guardado las 2 claves correctamente");
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
@@ -215,21 +232,91 @@ public class FormularioAplicacion extends javax.swing.JFrame {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void cifrarClaveSimetrica(){
-//         //crear e inicializar el cifrador RSA que se va a encargar de encriptar
-//            //la clave AES con la parte pública del par RSA
-//            Cipher cifradorRSA= Cipher.getInstance("RSA/ECB/PKCS1Padding");
-//            cifradorRSA.init(Cipher.ENCRYPT_MODE, claves.getPublic());
-//        
-//        //Una vez tenemos este cifrador cogemos los byte de la clave Blowfish y los encriptamos
-//        byte[] bytesClaveAES = clave.getEncoded();
-//        byte[] claveAESCifrada = cifradorRSA.doFinal(bytesClaveAES);
 
+    private void cifrarClaveSimetrica(String nomFicClavePublica) {
 
-       
+        try {
+            //crear e inicializar el cifrador RSA que se va a encargar de encriptar
+            //la clave AES con la parte pública del par RSA
+            Cipher cifradorRSA = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cifradorRSA.init(Cipher.ENCRYPT_MODE, claves.getPublic());
+
+            //Una vez tenemos este cifrador cogemos los byte de la clave AES y los encriptamos
+            byte[] bytesClaveAES = clave.getEncoded();
+            byte[] claveAESCifrada = cifradorRSA.doFinal(bytesClaveAES);
+
+            //Guardamos la clave simétrica cifrada con RSA en fichero clavecifrada
+            claveCifrada = new File("clavecifrada");
+            FileOutputStream fosClaveCifrada = new FileOutputStream(claveCifrada);
+            fosClaveCifrada.write(claveAESCifrada);
+
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
-    
+
+    private void descifrarClaveSimetrica(String nomFicClavePrivada) {
+        
+        try {
+            //Leer fichero de clave cifrada a array de bytes
+            
+//            claveCifrada = new File("clavecifrada");
+//            FileInputStream fosClaveCifrada = new FileInputStream(claveCifrada);
+
+            Path p = FileSystems.getDefault().getPath("", "clavecifrada");
+              System.out.println("La direccion es "+p);
+            byte[] bytesNuevaClaveCifrada = Files.readAllBytes(p);
+ 
+            //Leer fichero clave privada y pasar a array de bytes
+            Path p1 = FileSystems.getDefault().getPath("",nomFicClavePrivada);
+
+            byte[] bytesClavePrivada = Files.readAllBytes(p1); 
+               
+            //crear e inicializar el cifrador RSA que se va a encargar de desencriptar
+            //la clave AES con la parte pública del par RSA
+            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(bytesClavePrivada);
+            KeyFactory factoria = KeyFactory.getInstance("RSA");
+            PrivateKey clavePrivada = factoria.generatePrivate(spec);
+            
+            Cipher cifradorRSA= Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cifradorRSA.init(Cipher.DECRYPT_MODE, clavePrivada);
+            byte[] bytesnuevaClaveDescifrada = cifradorRSA.doFinal(bytesNuevaClaveCifrada);
+     
+            nuevaClaveDescifrada = new SecretKeySpec(bytesnuevaClaveDescifrada, "AES");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex) {
+            Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }
+
     /**
      * Método que resuelve el evento generado al pulsar el botón de mostrar el
      * fichero encriptado mostrandolo en el area de texto
@@ -286,6 +373,7 @@ public class FormularioAplicacion extends javax.swing.JFrame {
                 areaTexto.setText(linea);
             }
 
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -376,6 +464,11 @@ public class FormularioAplicacion extends javax.swing.JFrame {
      * @return
      */
     public File descifrarFichero() {
+           
+   if(nuevaClaveDescifrada.equals(clave)){
+        System.out.println("requete bieen");//comprueba el correcto funcionamiento de codificación y decodificación
+    
+    
         //Creamos los ficheros de cifrado y descifrado
         File ficheroCifrado = new File(fichero + ".cifrado");
         File ficheroDescifrado = new File(fichero + ".descifrado");
@@ -412,6 +505,7 @@ public class FormularioAplicacion extends javax.swing.JFrame {
             //Cerrar flujos
             fe.close();
             fs.close();
+            
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchPaddingException ex) {
@@ -427,7 +521,12 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         } catch (BadPaddingException ex) {
             Logger.getLogger(FormularioAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         return ficheroDescifrado;
+        }else{
+            System.out.println("La clave introducida no es correcta");
+            return null;
+        }
     }
 
     /**
@@ -439,7 +538,7 @@ public class FormularioAplicacion extends javax.swing.JFrame {
      * @return
      * @throws NoSuchAlgorithmException
      */
-    public SecretKey generarClaveSercreta(String usuario, String pwd) throws NoSuchAlgorithmException {
+    public SecretKey generarClaveSecreta(String usuario, String pwd) throws NoSuchAlgorithmException {
         //Suma de las cadenas
         String cadena = usuario + pwd;
         //Convertir cadena a array de bytes
@@ -456,6 +555,7 @@ public class FormularioAplicacion extends javax.swing.JFrame {
         SecretKey claveAES = generador.generateKey();
         System.out.println("Formato: " + claveAES.getFormat());
         System.out.println("Clave");
+        System.out.println(claveAES);
         mostrarBytes(claveAES.getEncoded());
         return claveAES;
     }
