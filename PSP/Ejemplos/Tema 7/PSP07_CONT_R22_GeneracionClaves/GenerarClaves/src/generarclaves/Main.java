@@ -29,8 +29,8 @@ public class Main {
               +claves.getPublic().getAlgorithm());
       System.out.println("Codificación Kpública: "
               +claves.getPublic().getFormat());
-      System.out.println("Bytes Kpública: "
-              +claves.getPublic().toString());
+//      System.out.println("Bytes Kpública: "
+//              +claves.getPublic().toString());
     }
     //Método que genera una clave tipo KeyPair (uan pareja de claves)
      public static KeyPair GeneraParejaClave() {
