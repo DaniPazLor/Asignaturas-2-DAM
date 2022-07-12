@@ -3,6 +3,7 @@ package matricula;
 import Alumno.AlumnoBean;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 
 import java.sql.*;
 import java.util.*;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Daniel Paz Lorenzo
  */
-public class MatriculaBean {
+public class MatriculaBean implements Serializable{
 
     public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
 
@@ -34,7 +35,7 @@ public class MatriculaBean {
      *
      * @throws Exception
      */
-    public MatriculaBean() {
+    public MatriculaBean()  {
         propertySupport = new PropertyChangeSupport(this);
         recargarFilas();
 
